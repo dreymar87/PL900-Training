@@ -18,6 +18,7 @@ export interface Certification {
   flashcards: Flashcard[];
   quizQuestions: QuizQuestion[];
   checklistGroups: ChecklistGroup[];
+  resources: Resource[];
 }
 
 // --- Exam Domain ---

@@ -14,6 +14,9 @@ const tabs = [
   { label: "Flashcards", suffix: "/flashcards" },
   { label: "Practice Quiz", suffix: "/quiz" },
   { label: "Checklist", suffix: "/checklist" },
+  { label: "Review", suffix: "/review" },
+  { label: "Resources", suffix: "/resources" },
+  { label: "Notes", suffix: "/notes" },
 ];
 
 export default function CertTabs({ vendorSlug, certSlug }: CertTabsProps) {
