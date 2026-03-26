@@ -31,12 +31,7 @@ export default async function CertificationPage({ params }: Props) {
   if (!cert) notFound();
 
   return (
-    <div className="max-w-5xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">{cert.name}</h1>
-        <p className="text-text-secondary">{cert.description}</p>
-      </div>
-
+    <div>
       {/* Quick stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         <div className="bg-surface-primary border border-border-primary rounded-xl p-4 text-center">
