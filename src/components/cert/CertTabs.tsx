@@ -17,6 +17,7 @@ const tabs = [
   { label: "Review", suffix: "/review" },
   { label: "Resources", suffix: "/resources" },
   { label: "Notes", suffix: "/notes" },
+  { label: "Progress", suffix: "/progress" },
 ];
 
 export default function CertTabs({ vendorSlug, certSlug }: CertTabsProps) {
