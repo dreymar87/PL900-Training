@@ -1,0 +1,11 @@
+{
+  "vendors": [
+    {
+      "slug": "microsoft",
+      "name": "Microsoft",
+      "description": "Microsoft Azure, Power Platform, and Microsoft 365 certifications",
+      "icon": "/icons/microsoft.svg",
+      "certifications": ["pl-900"]
+    }
+  ]
+}

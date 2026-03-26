@@ -1,0 +1,195 @@
+{
+  "slug": "pl-900",
+  "vendorSlug": "microsoft",
+  "name": "PL-900: Power Platform Fundamentals",
+  "description": "Master the Microsoft Power Platform Fundamentals exam",
+  "examDomains": [
+    {
+      "name": "Power Apps",
+      "weight": "20-25%",
+      "description": "Canvas and model-driven apps, controls, formulas, connectors",
+      "topics": ["App types", "UI design", "Data binding", "Connectors"]
+    },
+    {
+      "name": "Power Automate",
+      "weight": "15-20%",
+      "description": "Cloud and desktop flows, automation patterns, actions",
+      "topics": ["Flow types", "Triggers", "Actions", "RPA basics"]
+    },
+    {
+      "name": "Power BI",
+      "weight": "20-25%",
+      "description": "Data connection, visualization, dashboards, publishing",
+      "topics": ["Data sources", "Visuals", "Reports", "Sharing"]
+    },
+    {
+      "name": "Dataverse",
+      "weight": "15-20%",
+      "description": "Tables, relationships, security, data modeling",
+      "topics": ["Entities", "Relationships", "Security", "Rules"]
+    },
+    {
+      "name": "Connectors",
+      "weight": "10-15%",
+      "description": "Connections, authentication, built-in & premium connectors",
+      "topics": ["Connector types", "Authentication", "Limits"]
+    },
+    {
+      "name": "Admin & Governance",
+      "weight": "10-15%",
+      "description": "Environments, DLP policies, licensing, security",
+      "topics": ["Environments", "DLP", "Licensing", "Admin center"]
+    }
+  ],
+  "modules": [
+    {
+      "slug": "power-platform-overview",
+      "title": "Power Platform Overview",
+      "label": "Foundation",
+      "order": 1,
+      "sections": [
+        {
+          "heading": "What is Power Platform?",
+          "content": "A suite of low-code/no-code tools built on Azure that enables business users to create solutions without extensive coding."
+        },
+        {
+          "heading": "Core Components",
+          "content": "**Power Apps:** Build custom business apps. **Power Automate:** Automate workflows. **Power BI:** Analyze data and create reports. **Power Pages:** Create external websites."
+        }
+      ]
+    },
+    {
+      "slug": "power-apps-basics",
+      "title": "Power Apps Basics",
+      "label": "Core Concept",
+      "order": 2,
+      "sections": [
+        {
+          "heading": "Canvas vs Model-Driven",
+          "content": "**Canvas Apps:** Full design control, start from blank canvas, ideal for custom UX. **Model-Driven Apps:** Built on Dataverse data, follow entity structure, faster development."
+        },
+        {
+          "heading": "Key Features",
+          "content": "Drag-drop components, formulas & expressions, connectors to external data, offline capability, mobile-responsive."
+        }
+      ]
+    },
+    {
+      "slug": "power-automate-workflows",
+      "title": "Power Automate Workflows",
+      "label": "Automation",
+      "order": 3,
+      "sections": [
+        {
+          "heading": "Flow Types",
+          "content": "**Cloud Flows:** Automated (trigger-based), Instant (button-triggered), Scheduled (time-based). **Desktop Flows (RPA):** Automate legacy apps."
+        },
+        {
+          "heading": "Common Actions",
+          "content": "Create/update records, send emails, approve requests, condition branching, loop through data, call APIs."
+        }
+      ]
+    },
+    {
+      "slug": "power-bi-analytics",
+      "title": "Power BI & Analytics",
+      "label": "Data Insights",
+      "order": 4,
+      "sections": [
+        {
+          "heading": "Core Capabilities",
+          "content": "Connect to data sources, build interactive dashboards, create visualizations, publish reports, enable self-service analytics."
+        },
+        {
+          "heading": "Components",
+          "content": "**Power BI Desktop:** Create reports. **Power BI Service:** Publish & share. **Mobile Apps:** View on-the-go."
+        }
+      ]
+    },
+    {
+      "slug": "dataverse-connectors",
+      "title": "Dataverse & Connectors",
+      "label": "Data Management",
+      "order": 5,
+      "sections": [
+        {
+          "heading": "Dataverse",
+          "content": "Cloud-based data storage, tables & relationships, enforces business rules, audit trails, security roles, scales for enterprise."
+        },
+        {
+          "heading": "Connectors",
+          "content": "Connect to 600+ apps: Excel, SharePoint, SQL Server, Salesforce, Teams, Slack, and more. Pre-built integrations reduce custom code."
+        }
+      ]
+    },
+    {
+      "slug": "governance-administration",
+      "title": "Governance & Administration",
+      "label": "Management",
+      "order": 6,
+      "sections": [
+        {
+          "heading": "Key Areas",
+          "content": "Environment management, DLP policies (prevent data sharing), licensing, user access & permissions, app lifecycles."
+        },
+        {
+          "heading": "Admin Center",
+          "content": "Manage environments, set policies, monitor usage, handle support, configure storage, view analytics."
+        }
+      ]
+    }
+  ],
+  "flashcards": [
+    { "id": "fc-1", "question": "What is Power Platform?", "answer": "A suite of low-code/no-code tools (Power Apps, Power Automate, Power BI, Power Pages) for building business solutions." },
+    { "id": "fc-2", "question": "What's the difference between canvas and model-driven apps?", "answer": "Canvas apps offer full design control from blank slate; model-driven apps are built on Dataverse and follow entity structures." },
+    { "id": "fc-3", "question": "What types of flows exist in Power Automate?", "answer": "Cloud flows (Automated, Instant, Scheduled) and Desktop flows (RPA). Cloud flows are event/button/time-driven; desktop flows automate legacy systems." },
+    { "id": "fc-4", "question": "What is Dataverse?", "answer": "Cloud-based data storage with tables, relationships, business rules, audit trails, and security roles. Foundation for Power Apps." },
+    { "id": "fc-5", "question": "What are connectors?", "answer": "Pre-built integrations connecting Power Platform to 600+ apps (Excel, SharePoint, Teams, Salesforce, SQL Server, etc.)." },
+    { "id": "fc-6", "question": "Name 3 Power BI components", "answer": "Power BI Desktop (create reports), Power BI Service (publish/share), Mobile Apps (view reports). Also: Power BI Embedded, Analytics." },
+    { "id": "fc-7", "question": "What is DLP in Power Platform?", "answer": "Data Loss Prevention policies that restrict data sharing between connectors (e.g., preventing Dataverse from sharing to consumer apps)." },
+    { "id": "fc-8", "question": "What is an environment in Power Platform?", "answer": "Isolated space for app development, isolated Dataverse instances, separate security policies, and organizational boundaries." },
+    { "id": "fc-9", "question": "What's a formula in Power Apps?", "answer": "Excel-like expressions to control app behavior: formulas set properties, handle events, validate data, and compute values." },
+    { "id": "fc-10", "question": "What are premium connectors?", "answer": "Connectors requiring a Power Apps, Power Automate, or per-flow license (vs. standard connectors included in plans)." }
+  ],
+  "quizQuestions": [
+    { "id": "q-1", "question": "You want to build a mobile app for field workers. Which app type is best?", "options": ["Model-driven app", "Canvas app", "Power BI report", "Power Page"], "correctIndex": 1 },
+    { "id": "q-2", "question": "A user wants to approve purchase orders daily at 9 AM. What flow type should be used?", "options": ["Automated flow", "Instant flow", "Scheduled flow", "Desktop flow"], "correctIndex": 2 },
+    { "id": "q-3", "question": "Which service is used for analytics and data visualization?", "options": ["Power Apps", "Power Automate", "Power BI", "Dataverse"], "correctIndex": 2 },
+    { "id": "q-4", "question": "What is the main function of DLP policies?", "options": ["Encrypt data", "Prevent unauthorized data sharing", "Scale apps", "Create backups"], "correctIndex": 1 },
+    { "id": "q-5", "question": "Dataverse tables automatically support which feature?", "options": ["Audit trails", "Custom formulas", "Automated backups", "Built-in UI"], "correctIndex": 0 },
+    { "id": "q-6", "question": "Premium connectors typically require which license?", "options": ["Standard", "Pro", "Premium/Per-flow", "Free"], "correctIndex": 2 },
+    { "id": "q-7", "question": "Which is NOT a cloud flow type?", "options": ["Automated", "Instant", "Scheduled", "Desktop"], "correctIndex": 3 }
+  ],
+  "checklistGroups": [
+    { "title": "Power Apps fundamentals", "items": [
+      { "id": "cl-1", "text": "Understand canvas vs model-driven apps" },
+      { "id": "cl-2", "text": "Learn key controls and formulas" },
+      { "id": "cl-3", "text": "Practice data binding and connectors" }
+    ]},
+    { "title": "Power Automate basics", "items": [
+      { "id": "cl-4", "text": "Know flow types (Automated, Instant, Scheduled)" },
+      { "id": "cl-5", "text": "Understand common actions and triggers" },
+      { "id": "cl-6", "text": "Learn about connectors in flows" }
+    ]},
+    { "title": "Power BI essentials", "items": [
+      { "id": "cl-7", "text": "Understand Power BI Desktop workflows" },
+      { "id": "cl-8", "text": "Learn visualization types" },
+      { "id": "cl-9", "text": "Know report publishing and sharing" }
+    ]},
+    { "title": "Dataverse & security", "items": [
+      { "id": "cl-10", "text": "Understand tables and relationships" },
+      { "id": "cl-11", "text": "Learn security roles and permissions" },
+      { "id": "cl-12", "text": "Know audit and business rules" }
+    ]},
+    { "title": "Connectors & integration", "items": [
+      { "id": "cl-13", "text": "Know standard vs premium connectors" },
+      { "id": "cl-14", "text": "Understand authentication methods" },
+      { "id": "cl-15", "text": "Learn connector limits and licensing" }
+    ]},
+    { "title": "Governance & licensing", "items": [
+      { "id": "cl-16", "text": "Understand environments and DLP" },
+      { "id": "cl-17", "text": "Know licensing options" },
+      { "id": "cl-18", "text": "Learn admin center features" }
+    ]}
+  ]
+}
