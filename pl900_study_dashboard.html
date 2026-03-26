@@ -1,0 +1,432 @@
+<html>
+<head>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); background: transparent; }
+
+.dashboard { padding: 1.5rem; }
+.header { margin-bottom: 2rem; }
+.header h1 { font-size: 28px; font-weight: 500; margin-bottom: 0.5rem; }
+.header p { font-size: 14px; color: var(--color-text-secondary); }
+
+.nav-tabs { display: flex; gap: 8px; margin-bottom: 2rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.nav-tabs button { padding: 12px 16px; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-size: 14px; color: var(--color-text-secondary); transition: all 0.2s; }
+.nav-tabs button.active { color: var(--color-text-primary); border-bottom-color: var(--color-border-info); font-weight: 500; }
+.nav-tabs button:hover { color: var(--color-text-primary); }
+
+.section { display: none; }
+.section.active { display: block; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 2rem; }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; }
+.card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+.card-title { font-size: 16px; font-weight: 500; }
+.card-label { font-size: 12px; background: var(--color-background-secondary); color: var(--color-text-secondary); padding: 4px 12px; border-radius: var(--border-radius-md); }
+
+.flashcard { min-height: 200px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s; background: linear-gradient(135deg, var(--color-background-secondary) 0%, var(--color-background-tertiary) 100%); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 2rem; text-align: center; }
+.flashcard:hover { transform: scale(1.02); }
+.flashcard.flipped { background: linear-gradient(135deg, var(--color-background-info) 0%, var(--color-background-primary) 100%); }
+.flashcard-text { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+
+.question-block { margin-bottom: 1.5rem; }
+.q-text { font-weight: 500; margin-bottom: 12px; font-size: 15px; }
+.options { display: flex; flex-direction: column; gap: 8px; }
+.option { padding: 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); cursor: pointer; transition: all 0.2s; background: var(--color-background-primary); }
+.option:hover { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+.option.selected { border-color: var(--color-border-info); background: var(--color-background-info); }
+.option.correct { border-color: var(--color-border-success); background: var(--color-background-success); }
+.option.incorrect { border-color: var(--color-border-danger); background: var(--color-background-danger); }
+
+.checklist-item { padding: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 12px; }
+.checklist-item:last-child { border-bottom: none; }
+.checkbox { width: 20px; height: 20px; border: 0.5px solid var(--color-border-secondary); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.checkbox.checked { background: var(--color-background-success); border-color: var(--color-border-success); }
+.checklist-label { flex: 1; cursor: pointer; }
+.checklist-label.done { color: var(--color-text-secondary); text-decoration: line-through; }
+
+.progress { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.progress-bar { flex: 1; height: 6px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--color-border-success); transition: width 0.3s; }
+.progress-text { font-size: 12px; color: var(--color-text-secondary); min-width: 40px; text-align: right; }
+
+.study-card { background: var(--color-background-secondary); padding: 1rem; border-radius: var(--border-radius-lg); margin-bottom: 1rem; }
+.study-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+.study-card p { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+
+.button-group { display: flex; gap: 8px; margin-top: 12px; }
+button { padding: 10px 16px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; font-size: 14px; color: var(--color-text-primary); transition: all 0.2s; }
+button:hover { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+button:active { transform: scale(0.98); }
+
+.stat-card { background: var(--color-background-secondary); padding: 1rem; border-radius: var(--border-radius-md); text-align: center; }
+.stat-number { font-size: 24px; font-weight: 500; color: var(--color-text-primary); }
+.stat-label { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
+
+.domains-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.domain-box { background: var(--color-background-secondary); padding: 1rem; border-radius: var(--border-radius-lg); border-left: 3px solid var(--color-border-info); }
+.domain-box h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+.domain-box p { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 12px; }
+.topics { font-size: 12px; color: var(--color-text-secondary); }
+.topics strong { color: var(--color-text-primary); }
+</style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <h1>PL900 Study Hub</h1>
+    <p>Master the Microsoft Power Platform Fundamentals exam</p>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" data-tab="study-guides">Study Guides</button>
+    <button class="tab-btn" data-tab="flashcards">Flashcards</button>
+    <button class="tab-btn" data-tab="practice">Practice Quiz</button>
+    <button class="tab-btn" data-tab="checklist">Exam Checklist</button>
+    <button class="tab-btn" data-tab="progress">Progress</button>
+  </div>
+
+  <!-- Study Guides -->
+  <div id="study-guides" class="section active">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Power Platform Overview</div>
+          <div class="card-label">Foundation</div>
+        </div>
+        <div class="study-card">
+          <h3>What is Power Platform?</h3>
+          <p>A suite of low-code/no-code tools built on Azure that enables business users to create solutions without extensive coding.</p>
+        </div>
+        <div class="study-card">
+          <h3>Core Components</h3>
+          <p><strong>Power Apps:</strong> Build custom business apps. <strong>Power Automate:</strong> Automate workflows. <strong>Power BI:</strong> Analyze data and create reports. <strong>Power Pages:</strong> Create external websites.</p>
+        </div>
+        <button onclick="sendPrompt('Explain Power Platform licensing options')">Learn more ↗</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Power Apps Basics</div>
+          <div class="card-label">Core Concept</div>
+        </div>
+        <div class="study-card">
+          <h3>Canvas vs Model-Driven</h3>
+          <p><strong>Canvas Apps:</strong> Full design control, start from blank canvas, ideal for custom UX. <strong>Model-Driven Apps:</strong> Built on Dataverse data, follow entity structure, faster development.</p>
+        </div>
+        <div class="study-card">
+          <h3>Key Features</h3>
+          <p>Drag-drop components, formulas & expressions, connectors to external data, offline capability, mobile-responsive.</p>
+        </div>
+        <button onclick="sendPrompt('What are Power Apps connectors?')">Learn more ↗</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Power Automate Workflows</div>
+          <div class="card-label">Automation</div>
+        </div>
+        <div class="study-card">
+          <h3>Flow Types</h3>
+          <p><strong>Cloud Flows:</strong> Automated (trigger-based), Instant (button-triggered), Scheduled (time-based). <strong>Desktop Flows (RPA):</strong> Automate legacy apps.</p>
+        </div>
+        <div class="study-card">
+          <h3>Common Actions</h3>
+          <p>Create/update records, send emails, approve requests, condition branching, loop through data, call APIs.</p>
+        </div>
+        <button onclick="sendPrompt('Give me Power Automate best practices')">Learn more ↗</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Power BI & Analytics</div>
+          <div class="card-label">Data Insights</div>
+        </div>
+        <div class="study-card">
+          <h3>Core Capabilities</h3>
+          <p>Connect to data sources, build interactive dashboards, create visualizations, publish reports, enable self-service analytics.</p>
+        </div>
+        <div class="study-card">
+          <h3>Components</h3>
+          <p><strong>Power BI Desktop:</strong> Create reports. <strong>Power BI Service:</strong> Publish & share. <strong>Mobile Apps:</strong> View on-the-go.</p>
+        </div>
+        <button onclick="sendPrompt('Explain Power BI licensing tiers')">Learn more ↗</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Dataverse & Connectors</div>
+          <div class="card-label">Data Management</div>
+        </div>
+        <div class="study-card">
+          <h3>Dataverse</h3>
+          <p>Cloud-based data storage, tables & relationships, enforces business rules, audit trails, security roles, scales for enterprise.</p>
+        </div>
+        <div class="study-card">
+          <h3>Connectors</h3>
+          <p>Connect to 600+ apps: Excel, SharePoint, SQL Server, Salesforce, Teams, Slack, and more. Pre-built integrations reduce custom code.</p>
+        </div>
+        <button onclick="sendPrompt('What are the limits of Dataverse?')">Learn more ↗</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Governance & Administration</div>
+          <div class="card-label">Management</div>
+        </div>
+        <div class="study-card">
+          <h3>Key Areas</h3>
+          <p>Environment management, DLP policies (prevent data sharing), licensing, user access & permissions, app lifecycles.</p>
+        </div>
+        <div class="study-card">
+          <h3>Admin Center</h3>
+          <p>Manage environments, set policies, monitor usage, handle support, configure storage, view analytics.</p>
+        </div>
+        <button onclick="sendPrompt('Explain Power Platform DLP policies')">Learn more ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flashcards -->
+  <div id="flashcards" class="section">
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 20px; font-weight: 500; margin-bottom: 1rem;">Key Concepts</h2>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;">Click cards to reveal answers. Study at your own pace.</p>
+    </div>
+    
+    <div class="grid-2" id="flashcard-container">
+      <!-- Flashcards will be generated here -->
+    </div>
+  </div>
+
+  <!-- Practice Quiz -->
+  <div id="practice" class="section">
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 20px; font-weight: 500; margin-bottom: 0.5rem;">Quick Practice Quiz</h2>
+      <p style="color: var(--color-text-secondary);">Test your knowledge with these exam-style questions.</p>
+    </div>
+    <div id="quiz-container">
+      <!-- Quiz questions will be generated here -->
+    </div>
+    <div style="margin-top: 2rem; padding: 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); display: none;" id="quiz-results">
+      <h3 style="font-weight: 500; margin-bottom: 1rem;">Quiz Results</h3>
+      <div class="progress">
+        <div class="progress-bar"><div class="progress-fill" id="quiz-progress-fill"></div></div>
+        <div class="progress-text" id="quiz-progress-text">0/0</div>
+      </div>
+      <button onclick="resetQuiz()">Try Again</button>
+    </div>
+  </div>
+
+  <!-- Exam Checklist -->
+  <div id="checklist" class="section">
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 20px; font-weight: 500; margin-bottom: 0.5rem;">Exam Prep Checklist</h2>
+      <p style="color: var(--color-text-secondary);">Track your study progress toward exam readiness.</p>
+      <div class="progress" style="margin-top: 1rem;">
+        <div class="progress-bar"><div class="progress-fill" id="checklist-progress-fill" style="width: 0%;"></div></div>
+        <div class="progress-text" id="checklist-progress-text">0%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom: 1rem;">Study Domains</div>
+      <div id="checklist-container">
+        <!-- Checklist items will be generated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Dashboard -->
+  <div id="progress" class="section">
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 20px; font-weight: 500; margin-bottom: 1rem;">Your Study Progress</h2>
+    </div>
+    
+    <div class="grid-2">
+      <div class="stat-card">
+        <div class="stat-number" id="cards-studied">0</div>
+        <div class="stat-label">Flashcards Reviewed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="quiz-score">0%</div>
+        <div class="stat-label">Best Quiz Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="checklist-completion">0%</div>
+        <div class="stat-label">Checklist Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="study-streak">0</div>
+        <div class="stat-label">Day Study Streak</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 1rem;">Exam Domains Overview</h3>
+      <div class="domains-grid">
+        <div class="domain-box">
+          <h3>Power Apps (20-25%)</h3>
+          <p>Canvas and model-driven apps, controls, formulas, connectors</p>
+          <div class="topics">Topics: App types • UI design • Data binding • Connectors</div>
+        </div>
+        <div class="domain-box">
+          <h3>Power Automate (15-20%)</h3>
+          <p>Cloud and desktop flows, automation patterns, actions</p>
+          <div class="topics">Topics: Flow types • Triggers • Actions • RPA basics</div>
+        </div>
+        <div class="domain-box">
+          <h3>Power BI (20-25%)</h3>
+          <p>Data connection, visualization, dashboards, publishing</p>
+          <div class="topics">Topics: Data sources • Visuals • Reports • Sharing</div>
+        </div>
+        <div class="domain-box">
+          <h3>Dataverse (15-20%)</h3>
+          <p>Tables, relationships, security, data modeling</p>
+          <div class="topics">Topics: Entities • Relationships • Security • Rules</div>
+        </div>
+        <div class="domain-box">
+          <h3>Connectors (10-15%)</h3>
+          <p>Connections, authentication, built-in & premium connectors</p>
+          <div class="topics">Topics: Connector types • Authentication • Limits</div>
+        </div>
+        <div class="domain-box">
+          <h3>Admin & Governance (10-15%)</h3>
+          <p>Environments, DLP policies, licensing, security</p>
+          <div class="topics">Topics: Environments • DLP • Licensing • Admin center</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const flashcardsData = [
+  { q: "What is Power Platform?", a: "A suite of low-code/no-code tools (Power Apps, Power Automate, Power BI, Power Pages) for building business solutions." },
+  { q: "What's the difference between canvas and model-driven apps?", a: "Canvas apps offer full design control from blank slate; model-driven apps are built on Dataverse and follow entity structures." },
+  { q: "What types of flows exist in Power Automate?", a: "Cloud flows (Automated, Instant, Scheduled) and Desktop flows (RPA). Cloud flows are event/button/time-driven; desktop flows automate legacy systems." },
+  { q: "What is Dataverse?", a: "Cloud-based data storage with tables, relationships, business rules, audit trails, and security roles. Foundation for Power Apps." },
+  { q: "What are connectors?", a: "Pre-built integrations connecting Power Platform to 600+ apps (Excel, SharePoint, Teams, Salesforce, SQL Server, etc.)." },
+  { q: "Name 3 Power BI components", a: "Power BI Desktop (create reports), Power BI Service (publish/share), Mobile Apps (view reports). Also: Power BI Embedded, Analytics." },
+  { q: "What is DLP in Power Platform?", a: "Data Loss Prevention policies that restrict data sharing between connectors (e.g., preventing Dataverse from sharing to consumer apps)." },
+  { q: "What is an environment in Power Platform?", a: "Isolated space for app development, isolated Dataverse instances, separate security policies, and organizational boundaries." },
+  { q: "What's a formula in Power Apps?", a: "Excel-like expressions to control app behavior: formulas set properties, handle events, validate data, and compute values." },
+  { q: "What are premium connectors?", a: "Connectors requiring a Power Apps, Power Automate, or per-flow license (vs. standard connectors included in plans)." }
+];
+
+const quizData = [
+  { q: "You want to build a mobile app for field workers. Which app type is best?", opts: ["Model-driven app", "Canvas app", "Power BI report", "Power Page"], correct: 1 },
+  { q: "A user wants to approve purchase orders daily at 9 AM. What flow type should be used?", opts: ["Automated flow", "Instant flow", "Scheduled flow", "Desktop flow"], correct: 2 },
+  { q: "Which service is used for analytics and data visualization?", opts: ["Power Apps", "Power Automate", "Power BI", "Dataverse"], correct: 2 },
+  { q: "What is the main function of DLP policies?", opts: ["Encrypt data", "Prevent unauthorized data sharing", "Scale apps", "Create backups"], correct: 1 },
+  { q: "Dataverse tables automatically support which feature?", opts: ["Audit trails", "Custom formulas", "Automated backups", "Built-in UI"], correct: 0 },
+  { q: "Premium connectors typically require which license?", opts: ["Standard", "Pro", "Premium/Per-flow", "Free"], correct: 2 },
+  { q: "Which is NOT a cloud flow type?", opts: ["Automated", "Instant", "Scheduled", "Desktop"], correct: 3 }
+];
+
+const checklistData = [
+  { title: "Power Apps fundamentals", items: ["Understand canvas vs model-driven apps", "Learn key controls and formulas", "Practice data binding and connectors"] },
+  { title: "Power Automate basics", items: ["Know flow types (Automated, Instant, Scheduled)", "Understand common actions and triggers", "Learn about connectors in flows"] },
+  { title: "Power BI essentials", items: ["Understand Power BI Desktop workflows", "Learn visualization types", "Know report publishing and sharing"] },
+  { title: "Dataverse & security", items: ["Understand tables and relationships", "Learn security roles and permissions", "Know audit and business rules"] },
+  { title: "Connectors & integration", items: ["Know standard vs premium connectors", "Understand authentication methods", "Learn connector limits and licensing"] },
+  { title: "Governance & licensing", items: ["Understand environments and DLP", "Know licensing options", "Learn admin center features"] }
+];
+
+// Initialize
+function initFlashcards() {
+  const container = document.getElementById('flashcard-container');
+  container.innerHTML = flashcardsData.map((fc, i) => `
+    <div class="flashcard" data-card="${i}" onclick="toggleFlashcard(this)">
+      <div class="flashcard-text" data-q="${fc.q}" data-a="${fc.a}">${fc.q}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFlashcard(el) {
+  el.classList.toggle('flipped');
+  const text = el.querySelector('.flashcard-text');
+  const isFlipped = el.classList.contains('flipped');
+  text.textContent = isFlipped ? text.dataset.a : text.dataset.q;
+  document.getElementById('cards-studied').textContent = Math.max(parseInt(document.getElementById('cards-studied').textContent) + (isFlipped ? 1 : 0), parseInt(document.getElementById('cards-studied').textContent));
+}
+
+function initQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = quizData.map((q, i) => `
+    <div class="question-block">
+      <div class="q-text">${i+1}. ${q.q}</div>
+      <div class="options">
+        ${q.opts.map((opt, j) => `<div class="option" onclick="selectAnswer(${i}, ${j}, ${q.correct})">${opt}</div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectAnswer(qIdx, optIdx, correct) {
+  const options = document.querySelectorAll(`.question-block:nth-child(${qIdx+1}) .option`);
+  options.forEach(o => o.classList.remove('selected', 'correct', 'incorrect'));
+  options[optIdx].classList.add('selected', optIdx === correct ? 'correct' : 'incorrect');
+  if (optIdx === correct) options[optIdx].textContent += ' ✓';
+}
+
+function resetQuiz() {
+  initQuiz();
+  document.getElementById('quiz-results').style.display = 'none';
+}
+
+function initChecklist() {
+  const container = document.getElementById('checklist-container');
+  container.innerHTML = checklistData.map(domain => `
+    <div style="margin-bottom: 1.5rem;">
+      <div style="font-weight: 500; margin-bottom: 1rem; color: var(--color-text-primary);">${domain.title}</div>
+      ${domain.items.map((item, i) => `
+        <div class="checklist-item">
+          <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+          <div class="checklist-label" onclick="toggleCheckbox(this.previousElementSibling)">${item}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function toggleCheckbox(el) {
+  if (el.classList) el.classList.toggle('checked');
+  let label = el.nextElementSibling;
+  if (label && label.classList) label.classList.toggle('done');
+  updateChecklistProgress();
+}
+
+function updateChecklistProgress() {
+  const total = document.querySelectorAll('.checkbox').length;
+  const checked = document.querySelectorAll('.checkbox.checked').length;
+  const percent = Math.round((checked / total) * 100);
+  document.getElementById('checklist-progress-fill').style.width = percent + '%';
+  document.getElementById('checklist-progress-text').textContent = percent + '%';
+  document.getElementById('checklist-completion').textContent = percent + '%';
+}
+
+// Tab navigation
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const tabId = btn.dataset.tab;
+    document.getElementById(tabId).classList.add('active');
+    if (tabId === 'flashcards' && !document.getElementById('flashcard-container').innerHTML) initFlashcards();
+    if (tabId === 'practice' && !document.getElementById('quiz-container').innerHTML) initQuiz();
+    if (tabId === 'checklist' && !document.getElementById('checklist-container').innerHTML) initChecklist();
+  });
+});
+
+// Initial load
+window.addEventListener('load', () => {
+  initFlashcards();
+  initQuiz();
+  initChecklist();
+  updateChecklistProgress();
+});
+</script>
+</body>
+</html>
