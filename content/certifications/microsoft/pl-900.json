@@ -191,5 +191,17 @@
       { "id": "cl-17", "text": "Know licensing options" },
       { "id": "cl-18", "text": "Learn admin center features" }
     ]}
+  ],
+  "resources": [
+    { "id": "res-1", "title": "Microsoft Learn: PL-900 Learning Path", "url": "https://learn.microsoft.com/en-us/training/paths/power-plat-fundamentals/", "type": "course" },
+    { "id": "res-2", "title": "Power Platform Overview Documentation", "url": "https://learn.microsoft.com/en-us/power-platform/", "type": "documentation" },
+    { "id": "res-3", "title": "Power Apps Documentation", "url": "https://learn.microsoft.com/en-us/power-apps/", "type": "documentation" },
+    { "id": "res-4", "title": "Power Automate Documentation", "url": "https://learn.microsoft.com/en-us/power-automate/", "type": "documentation" },
+    { "id": "res-5", "title": "Power BI Documentation", "url": "https://learn.microsoft.com/en-us/power-bi/", "type": "documentation" },
+    { "id": "res-6", "title": "Dataverse Documentation", "url": "https://learn.microsoft.com/en-us/power-apps/maker/data-platform/", "type": "documentation" },
+    { "id": "res-7", "title": "PL-900 Exam Skills Outline", "url": "https://learn.microsoft.com/en-us/credentials/certifications/power-platform-fundamentals/", "type": "article" },
+    { "id": "res-8", "title": "Power Platform Admin Center Guide", "url": "https://learn.microsoft.com/en-us/power-platform/admin/", "type": "documentation" },
+    { "id": "res-9", "title": "Microsoft Learn: Create Canvas Apps", "url": "https://learn.microsoft.com/en-us/training/paths/create-powerapps/", "type": "course" },
+    { "id": "res-10", "title": "Microsoft Learn: Create Automated Flows", "url": "https://learn.microsoft.com/en-us/training/paths/automate-process-power-automate/", "type": "course" }
   ]
 }

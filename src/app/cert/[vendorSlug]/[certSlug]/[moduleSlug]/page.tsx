@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getVendors, getCertification, getModule } from "@/lib/content";
 import { modulePath, certPath } from "@/lib/constants";
 import StudyGuideSection from "@/components/cert/StudyGuideSection";
+import NoteEditor from "@/components/cert/NoteEditor";
 import Badge from "@/components/ui/Badge";
 
 interface Props {
@@ -64,6 +65,12 @@ export default async function ModulePage({ params }: Props) {
         {mod.sections.map((section, i) => (
           <StudyGuideSection key={i} section={section} />
         ))}
+      </div>
+
+      {/* Module notes */}
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-3">Module Notes</h2>
+        <NoteEditor certSlug={certSlug} moduleSlug={mod.slug} />
       </div>
 
       {/* Prev/Next navigation */}
