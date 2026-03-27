@@ -1,0 +1,264 @@
+## Power Apps Fundamentals
+
+Power Apps is the application development component of the Microsoft Power Platform. It enables both citizen developers and professional developers to build custom business applications without traditional coding. This module covers the two primary app types, their controls and properties, key formulas, data delegation, and responsive design -- all critical topics for the PL-900 exam.
+
+---
+
+## Canvas Apps
+
+Canvas apps give you complete control over the user interface. You start with a blank canvas (or a template) and design every screen by dragging, dropping, and positioning controls exactly where you want them -- much like designing a PowerPoint slide.
+
+### The Canvas App Design Experience
+
+When you open Power Apps Studio to build a canvas app, you work with three main areas:
+
+- **The screen** -- Your working canvas where you place controls and design the layout. Each app can have multiple screens, and users navigate between them.
+- **The formula bar** -- Located at the top, similar to Excel. You write Power Fx formulas here to define the behavior and data binding of each control.
+- **The properties pane** -- On the right side, showing all configurable properties of the currently selected control. Properties include visual settings (color, size, position) and behavioral settings (OnSelect, OnChange, Items).
+
+<KeyTerm term="Power Fx">The low-code programming language used in canvas apps. Power Fx is based on Excel-like formula syntax, making it familiar to business users who already work with spreadsheets. It is declarative, strongly typed, and evaluated in real time.</KeyTerm>
+
+### Key Characteristics of Canvas Apps
+
+- **Pixel-perfect design** -- You control the exact position and size of every element.
+- **Multiple data sources** -- A single canvas app can connect to many data sources simultaneously (SharePoint, SQL, Dataverse, Excel, REST APIs).
+- **Mobile-first option** -- You can choose a phone or tablet layout at creation time.
+- **Offline capability** -- Canvas apps support offline mode using the `SaveData` and `LoadData` functions with local collections.
+- **Formula-driven logic** -- All behavior is defined through Power Fx formulas rather than event handlers or compiled code.
+
+<DidYouKnow>Canvas apps can connect to over 1,000 data sources at once. A single app could pull employee data from SharePoint, financial data from SQL Server, and weather data from a custom API -- all displayed on the same screen.</DidYouKnow>
+
+<ExamTip>When the exam describes a scenario requiring custom UI design, pixel-perfect layouts, or connecting to multiple non-Dataverse data sources, the answer is almost always a canvas app.</ExamTip>
+
+---
+
+## Model-Driven Apps
+
+Model-driven apps take the opposite approach to canvas apps. Instead of starting with the UI, you start with the data model in Microsoft Dataverse. The app interface is generated automatically based on the tables, columns, views, forms, and dashboards you configure.
+
+### The Model-Driven App Design Experience
+
+Building a model-driven app involves:
+
+1. **Defining your data model** -- Create tables and columns in Dataverse. Define relationships between tables (one-to-many, many-to-many).
+2. **Configuring views** -- Views define which records appear in lists and what columns are visible. You can create active views, inactive views, lookup views, and quick find views.
+3. **Designing forms** -- Forms control the layout when users open a single record. You add sections, tabs, and fields using a form designer.
+4. **Building the sitemap** -- The sitemap defines the navigation structure: areas, groups, and sub-areas that appear in the left navigation panel.
+5. **Adding dashboards and charts** -- Interactive dashboards aggregate data from multiple views with charts and filters.
+6. **Configuring business rules** -- No-code rules that validate data, show/hide fields, or set default values based on conditions.
+
+<KeyTerm term="Sitemap">The navigation structure of a model-driven app that defines which tables, dashboards, and custom pages appear in the left-hand navigation panel. It is organized into areas, groups, and sub-areas.</KeyTerm>
+
+<KeyTerm term="Business Rule">A no-code rule applied to a Dataverse table that executes logic like field validation, setting default values, showing or hiding fields, and displaying error messages -- all without writing formulas or code.</KeyTerm>
+
+### Key Characteristics of Model-Driven Apps
+
+- **Data-first design** -- The UI is derived from the Dataverse schema. Changes to the data model automatically reflect in the app.
+- **Consistent, responsive UI** -- Microsoft provides the interface framework. The app automatically adapts to different screen sizes.
+- **Built-in features** -- Record lists, detail forms, dashboards, charts, timelines, and related record sub-grids are provided out of the box.
+- **Dataverse required** -- Model-driven apps only work with Microsoft Dataverse. They cannot connect directly to SharePoint or SQL.
+- **Enterprise-grade** -- Role-based security, audit logging, and advanced find are built in.
+
+<ExamTip>When the exam describes a scenario involving Dataverse data, multiple related tables, security roles, or an interface that should look like Dynamics 365, the answer is a model-driven app.</ExamTip>
+
+---
+
+## Canvas Apps vs Model-Driven Apps
+
+| Aspect | Canvas Apps | Model-Driven Apps |
+|---|---|---|
+| Design approach | Start with a blank screen; pixel-perfect control | Start with data model; UI auto-generated |
+| Data source | Any of 1,000+ connectors (SharePoint, SQL, Excel, APIs) | Microsoft Dataverse only |
+| Offline support | Yes, using SaveData/LoadData functions | Limited offline via Dynamics 365 mobile app |
+| Responsive design | Manual; you design phone and tablet layouts separately | Automatic; framework handles screen adaptation |
+| Development effort | Higher for complex UIs; every element placed manually | Lower for data-centric apps; forms and views configured |
+| Best for | Custom UIs, task-specific apps, consumer-facing scenarios | Data-heavy apps, CRM-like apps, multi-table relationships |
+| Navigation | Custom; you build your own menus and navigation buttons | Sitemap-based; consistent left navigation panel |
+| Business rules | Power Fx formulas on control properties | Declarative business rules plus Power Fx on forms |
+| Learning curve | Lower for simple apps; Excel-like formulas | Requires understanding Dataverse schema design |
+
+<Callout type="info" title="You Can Combine Both">A model-driven app can embed canvas app components within its forms using the Canvas App control. This gives you the structured navigation and data management of model-driven apps with custom UI sections built as canvas apps where needed.</Callout>
+
+---
+
+## Controls and Properties
+
+Controls are the building blocks of canvas apps. Every button, text input, gallery, and image on a screen is a control with configurable properties.
+
+### Galleries
+
+Galleries display a collection of records from a data source. They are the primary way to show lists of data in canvas apps.
+
+- **Vertical gallery** -- Displays records in a scrollable vertical list. Most common for phone layouts.
+- **Horizontal gallery** -- Displays records side by side in a horizontal scroll.
+- **Flexible height gallery** -- Allows each row to have a different height based on content.
+
+Key gallery properties:
+- **Items** -- The data source or formula that provides records (e.g., `Filter(Employees, Department = "Sales")`)
+- **TemplateFill** -- Background color of each item
+- **OnSelect** -- Action when a user taps a gallery item (e.g., `Navigate(DetailScreen, ScreenTransition.None)`)
+
+### Forms
+
+Forms display and edit a single record from a data source.
+
+- **Edit form** -- Allows users to create new records or edit existing ones
+- **Display form** -- Shows record data in read-only mode
+
+Key form properties:
+- **DataSource** -- The table the form is bound to
+- **Item** -- The specific record to display (e.g., `Gallery1.Selected`)
+- **OnSuccess** -- Action after a successful save (e.g., `Navigate(SuccessScreen)`)
+- **OnFailure** -- Action if the save fails
+
+### Common Controls
+
+- **Button** -- Triggers an action via its `OnSelect` property
+- **Text input** -- Captures user text entry; value available via `.Text` property
+- **Dropdown / Combo box** -- Selection from a list of options
+- **Date picker** -- Calendar-based date selection
+- **Toggle** -- Boolean on/off switch
+- **Image** -- Displays images from URLs or media
+- **Icon** -- Built-in icon library for common actions
+
+<ExamTip>The PL-900 exam may ask what type of control to use for a specific scenario. Remember: galleries for lists of records, forms for viewing/editing single records, and buttons for triggering actions.</ExamTip>
+
+---
+
+## Key Formulas
+
+Power Fx formulas drive all logic in canvas apps. The following formulas appear frequently on the PL-900 exam.
+
+### Filter
+
+Returns a subset of records from a data source that match one or more conditions.
+
+```
+Filter(Employees, Department = "Marketing", Status = "Active")
+```
+
+This returns all employees who are in the Marketing department AND have an Active status.
+
+### LookUp
+
+Returns the first record from a data source that matches a condition. Unlike Filter (which returns a table), LookUp returns a single record.
+
+```
+LookUp(Employees, EmployeeID = 1042)
+```
+
+### Patch
+
+Creates or updates a record in a data source. It is the most flexible way to write data.
+
+```
+Patch(Employees, Defaults(Employees), {Name: "Jane Smith", Department: "Sales"})
+```
+
+This creates a new employee record. To update an existing record, replace `Defaults(Employees)` with a reference to the record.
+
+### Navigate
+
+Moves the user to a different screen in the app. Optionally includes a transition animation.
+
+```
+Navigate(DetailScreen, ScreenTransition.Fade)
+```
+
+### Set
+
+Creates or updates a global variable. Global variables are accessible from any screen in the app.
+
+```
+Set(varCurrentUser, User().FullName)
+```
+
+### Collect
+
+Adds records to a collection (an in-memory table). Collections are useful for temporary data storage and offline scenarios.
+
+```
+Collect(colCart, {Product: "Widget", Quantity: 3, Price: 9.99})
+```
+
+<KeyTerm term="Collection">An in-memory table in a canvas app that stores data temporarily during a user session. Collections are created using the Collect or ClearCollect functions and are lost when the app is closed.</KeyTerm>
+
+<Callout type="warning" title="Set vs UpdateContext">Set creates global variables visible across all screens. UpdateContext creates local variables visible only on the current screen. The exam may test whether you know the scope difference.</Callout>
+
+---
+
+## Data Delegation
+
+Delegation is one of the most important concepts for canvas app performance and a common PL-900 exam topic.
+
+<KeyTerm term="Delegation">The process of sending data processing (filtering, sorting, searching) to the data source rather than retrieving all records and processing them locally in the app. When a formula is delegable, the data source handles the heavy lifting. When it is non-delegable, Power Apps retrieves only the first 500 records (or up to 2,000 if configured) and processes them locally.</KeyTerm>
+
+### The 500-Record Limit
+
+By default, when a formula cannot be delegated to the data source, Power Apps retrieves only the first 500 records. This limit can be increased to a maximum of 2,000 records in app settings, but it cannot be removed entirely. This means non-delegable queries against data sources with more than 2,000 records will return incomplete results.
+
+### Delegable vs Non-Delegable Functions
+
+Whether a function is delegable depends on both the function itself and the data source being used.
+
+**Commonly delegable** (with Dataverse and SQL Server):
+- `Filter` with simple comparisons (`=`, `<>`, `<`, `>`, `<=`, `>=`)
+- `Sort` and `SortByColumns`
+- `Search` (for Dataverse)
+- `StartsWith`
+
+**Commonly non-delegable**:
+- `LookUp` with complex expressions
+- `Search` (for SharePoint)
+- `Last`, `FirstN`, `LastN`
+- `CountRows` (for some data sources)
+- Calculated columns in Filter conditions
+- `in` operator and `exactin` operator (varies by source)
+
+<ExamTip>When you see a yellow warning triangle on a formula in Power Apps Studio, it means the formula is non-delegable. The exam may present a scenario where an app shows incomplete data and ask you to identify delegation as the cause.</ExamTip>
+
+<Callout type="warning" title="Delegation Depends on the Data Source">The same formula might be delegable with Dataverse but non-delegable with SharePoint. Always consider the data source when evaluating delegation. Dataverse and SQL Server support the most delegable operations.</Callout>
+
+---
+
+## Responsive Layouts
+
+By default, canvas apps have a fixed screen size chosen at creation (phone or tablet). However, you can enable responsive design to make your app adapt to different screen sizes.
+
+### Enabling Responsive Design
+
+1. Turn off **Scale to fit** in app settings.
+2. Turn off **Lock aspect ratio**.
+3. Use relative positioning and sizing formulas instead of fixed pixel values.
+
+### Responsive Formulas
+
+Instead of setting a button width to `300`, you would use:
+
+```
+Parent.Width * 0.8
+```
+
+This makes the button always 80% of its parent container width, regardless of screen size.
+
+### Layout Containers
+
+Power Apps provides horizontal and vertical containers that automatically arrange child controls:
+
+- **Horizontal container** -- Arranges controls side by side from left to right
+- **Vertical container** -- Stacks controls from top to bottom
+- Containers support properties like gap, padding, alignment, and wrap
+
+<Callout type="success" title="Containers Are the Modern Approach">Microsoft recommends using layout containers for all new canvas apps. They handle responsive behavior automatically and reduce the need for complex positioning formulas.</Callout>
+
+---
+
+## Key Takeaways for the PL-900 Exam
+
+- **Canvas apps** start with the UI; model-driven apps start with the data model.
+- Canvas apps connect to any data source; model-driven apps require Dataverse.
+- **Galleries** display lists, **forms** display/edit single records, **buttons** trigger actions.
+- Know the six key formulas: Filter, LookUp, Patch, Navigate, Set, Collect.
+- **Delegation** determines whether data processing happens on the server or locally -- non-delegable queries are limited to 500-2,000 records.
+- Responsive layouts use relative formulas and layout containers instead of fixed pixel values.
+- You can embed canvas app components inside model-driven app forms for the best of both approaches.

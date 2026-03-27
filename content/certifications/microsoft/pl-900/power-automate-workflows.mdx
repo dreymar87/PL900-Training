@@ -1,0 +1,320 @@
+## Power Automate Workflows
+
+Power Automate is the workflow automation engine of the Microsoft Power Platform. It enables users to create automated processes that connect services, synchronize data, send notifications, and orchestrate complex business logic -- all through a visual designer without writing traditional code. For the PL-900 exam, you must understand the different flow types, common actions and triggers, expression language, and error handling patterns.
+
+---
+
+## Cloud Flow Types
+
+Cloud flows run in the Microsoft cloud and are the most common type of Power Automate flow. There are three distinct types, each defined by how the flow is triggered.
+
+### Automated Flows
+
+Automated flows start when a specific event (trigger) occurs in a connected service. You do not manually invoke them -- they listen for events and respond automatically.
+
+**Common trigger examples:**
+- When a new item is created in a SharePoint list
+- When an email arrives in Outlook with a specific subject line
+- When a row is added to a Dataverse table
+- When a file is created in OneDrive or SharePoint document library
+- When a new response is submitted in Microsoft Forms
+- When a record is modified in SQL Server
+
+Automated flows are the backbone of event-driven automation. A typical use case is: when a new employee is added to the HR system, automatically create their Microsoft 365 account, send a welcome email, add them to the appropriate Teams channels, and create onboarding tasks in Planner.
+
+<ExamTip>If the exam describes a scenario where something should happen automatically in response to a data change or event, the correct answer is an automated cloud flow. The keyword to listen for is "when" -- "when an item is created," "when an email arrives," "when a file is uploaded."</ExamTip>
+
+### Instant Flows
+
+Instant flows (also called manually triggered flows) start when a user deliberately initiates them. They require human action to begin.
+
+**Common trigger examples:**
+- A user presses a button in the Power Automate mobile app
+- A user clicks a flow button embedded in a Power App
+- A user selects an item in SharePoint and chooses "Run flow" from the menu
+- A user triggers the flow from a Teams message action
+- A user selects rows in a Dataverse view and runs a flow
+
+Instant flows are ideal for on-demand actions. For example, a sales manager could tap a button on their phone to generate a weekly pipeline report, or a help desk agent could trigger a flow from a Teams message to escalate a ticket.
+
+<KeyTerm term="Instant Flow">A cloud flow that runs only when a user manually triggers it, such as pressing a button in the Power Automate mobile app, clicking a button in Power Apps, or selecting a menu option in SharePoint or Teams.</KeyTerm>
+
+### Scheduled Flows
+
+Scheduled flows run on a recurring time-based schedule that you define. They do not depend on external events or user actions.
+
+**Common schedule examples:**
+- Every weekday at 9:00 AM (send a daily digest email)
+- Every Monday at 6:00 AM (generate a weekly summary report)
+- Every hour (check an external API for new data and sync to Dataverse)
+- The first day of every month (calculate monthly KPIs and update dashboards)
+- Every 15 minutes (poll a legacy system that does not support event triggers)
+
+Scheduled flows are essential for batch processing, periodic reporting, and integrating with systems that lack webhooks or event-based triggers.
+
+<ExamTip>If the exam says "every day at" or "on a recurring schedule," the answer is a scheduled cloud flow. If it says "when an event happens," it is automated. If it says "when a user clicks/presses/selects," it is instant.</ExamTip>
+
+### Cloud Flow Types at a Glance
+
+| Aspect | Automated Flow | Instant Flow | Scheduled Flow |
+|---|---|---|---|
+| Trigger | An event in a connected service | Manual user action (button, menu) | A recurring time schedule |
+| When it runs | Immediately after the event occurs | Only when user initiates it | At the defined interval or time |
+| User involvement | None required after setup | User must trigger each run | None required after setup |
+| Best for | Event-driven reactions (new item, email, file) | On-demand tasks (generate report, escalate) | Periodic batch jobs (daily sync, weekly reports) |
+| Example | When a SharePoint item is created, send a notification | User presses a button to request time off | Every day at 9 AM, send a summary email |
+
+---
+
+## Desktop Flows and Robotic Process Automation
+
+Desktop flows extend Power Automate into the world of legacy desktop applications, mainframe terminals, and systems that lack modern APIs. They use Robotic Process Automation (RPA) to mimic human interactions with software.
+
+### How Desktop Flows Work
+
+Desktop flows are built using **Power Automate for Desktop**, a Windows application that provides:
+
+- **A recorder** that captures mouse clicks, keystrokes, and UI interactions as you perform actions on your desktop. The recorder generates a sequence of steps that can be replayed.
+- **A visual action designer** with 400+ prebuilt actions for file manipulation, Excel operations, web browser control, email, database queries, and more.
+- **Variables and loops** for building logic into desktop automations.
+- **UI element selectors** that identify buttons, fields, and controls in desktop applications.
+
+<KeyTerm term="Desktop Flow">A Power Automate flow that runs on a local Windows machine and automates interactions with desktop applications, legacy systems, and websites using RPA technology. Desktop flows require the Power Automate for Desktop application.</KeyTerm>
+
+### Attended vs Unattended Modes
+
+Desktop flows can run in two modes, and the PL-900 exam frequently asks about the difference.
+
+**Attended desktop flows:**
+- Run while a user is signed in and watching the screen
+- The user can see the automation happening in real time
+- The user can interact with the machine during pauses
+- Useful for semi-automated tasks where the user handles exceptions
+- Requires a Power Automate per-user plan with attended RPA
+
+**Unattended desktop flows:**
+- Run on a machine without any user signed in
+- The machine is dedicated to automation -- no human interaction
+- Can run overnight or during off-hours
+- Ideal for high-volume, repetitive processing
+- Requires the unattended RPA add-on license
+
+<ExamTip>Attended flows need a user present; unattended flows run autonomously. If the exam describes a scenario where automation runs overnight with no human involvement, the answer is an unattended desktop flow.</ExamTip>
+
+<DidYouKnow>Power Automate for Desktop is included free with Windows 10 and Windows 11 for basic personal automation. However, cloud integration and unattended execution require a premium Power Automate license.</DidYouKnow>
+
+---
+
+## Business Process Flows
+
+Business process flows (BPFs) are a special flow type that provides a guided, multi-stage experience within model-driven apps and Dataverse. They are not automation flows -- they guide human users through a defined business process.
+
+### How Business Process Flows Work
+
+A BPF appears as a horizontal bar at the top of a model-driven app form, showing the stages of a process. Each stage contains steps (data fields) that the user should complete before advancing.
+
+**Example: Lead-to-Opportunity process**
+1. **Qualify** stage -- Capture lead source, budget, and decision timeline
+2. **Develop** stage -- Identify stakeholders, requirements, and competitors
+3. **Propose** stage -- Create proposal, set pricing, present solution
+4. **Close** stage -- Negotiate terms, finalize contract, mark as won or lost
+
+### Key BPF Features
+
+- **Stages and steps** -- Each stage has required and optional data entry steps
+- **Branching** -- BPFs can branch into different paths based on conditions. For example, a support case BPF might branch into "Hardware Issue" or "Software Issue" paths, each with different stages
+- **Multiple tables** -- A single BPF can span across multiple Dataverse tables. The lead-to-opportunity process starts in the Lead table and transitions to the Opportunity table
+- **Security** -- BPF access is controlled through security roles in Dataverse
+
+<KeyTerm term="Business Process Flow">A guided, multi-stage visual process bar in model-driven apps that walks users through a defined business procedure. Each stage contains steps (fields) to complete, and the flow can branch based on data conditions.</KeyTerm>
+
+<Callout type="info" title="BPFs vs Cloud Flows">Business process flows guide humans through stages. Cloud flows automate actions without human involvement (or with minimal involvement for approvals). They complement each other: a BPF guides a user through a sales process, while cloud flows send automated notifications at each stage transition.</Callout>
+
+---
+
+## Common Actions
+
+Actions are the building blocks of cloud flows. After a trigger fires, actions perform the work. Here are the most common action categories.
+
+### CRUD Operations (Create, Read, Update, Delete)
+
+- **Create a record** -- Add a new row to Dataverse, SharePoint, SQL Server, or other data sources
+- **Get a record / Get items** -- Retrieve one or many records from a data source
+- **Update a record** -- Modify an existing record's fields
+- **Delete a record** -- Remove a record from a data source
+
+### Email and Notifications
+
+- **Send an email (V2)** -- Send email through Outlook with HTML formatting, attachments, and CC/BCC
+- **Post a message in Teams** -- Send a message to a Teams channel or chat
+- **Send a push notification** -- Send a mobile notification to the Power Automate app
+
+### Approvals
+
+- **Start and wait for an approval** -- Send an approval request to one or more people and pause the flow until they respond (Approve or Reject)
+- **Approve/Reject options** -- First to respond, everyone must approve, or custom responses
+- Approvals appear in the Power Automate Approvals center, Teams, Outlook, and the mobile app
+
+<ExamTip>The approval action is a favorite on the PL-900 exam. Remember that "Start and wait for an approval" pauses the flow until the approver responds. The flow does not continue until a decision is made.</ExamTip>
+
+### HTTP Actions
+
+- **HTTP** -- Make a raw HTTP request to any REST API (premium connector)
+- **Send an HTTP request to SharePoint** -- Make a SharePoint REST API call without the full HTTP premium connector
+
+---
+
+## Conditions, Switches, and Loops
+
+Control actions determine the logical flow of your automation.
+
+### Conditions (If/Else)
+
+A condition evaluates a true/false expression and branches into "If yes" and "If no" paths.
+
+```
+Condition: [Status] is equal to "Urgent"
+  If yes --> Send email to manager, Create high-priority task
+  If no  --> Add to standard queue
+```
+
+### Switch (Multiple Branches)
+
+A switch evaluates a value against multiple cases, similar to a switch/case statement in code. It is cleaner than nested conditions when you have many possible values.
+
+```
+Switch on: [Department]
+  Case "Sales"     --> Notify sales manager
+  Case "Support"   --> Create support ticket
+  Case "HR"        --> Route to HR portal
+  Default          --> Send to general inbox
+```
+
+### Loops
+
+- **Apply to each** -- Iterates over every item in an array or collection. For example, loop through all attachments in an email and save each one to SharePoint.
+- **Do until** -- Repeats actions until a specified condition is met. For example, poll an API every 5 minutes until a status changes to "Complete."
+
+<Callout type="warning" title="Avoid Unnecessary Loops">Apply to each loops can significantly slow down flows if processing thousands of items. When possible, use batch operations or filter your data before the loop to reduce iterations.</Callout>
+
+---
+
+## Expression Language and Dynamic Content
+
+Power Automate provides two ways to work with data inside flows: dynamic content and expressions.
+
+### Dynamic Content
+
+Dynamic content is the simplest way to reference data from previous steps. When you click in a field, a panel appears showing outputs from all prior actions. For example, after a "When a new item is created" trigger, you can insert the item's Title, Created By, or any column value into a subsequent action.
+
+### Expressions
+
+For more complex data manipulation, Power Automate supports a rich expression language based on Workflow Definition Language (similar to Azure Logic Apps).
+
+**Common expression categories:**
+
+- **String functions** -- `concat()`, `substring()`, `replace()`, `toLower()`, `toUpper()`, `trim()`
+- **Collection functions** -- `length()`, `first()`, `last()`, `contains()`, `join()`
+- **Date/time functions** -- `utcNow()`, `addDays()`, `formatDateTime()`, `convertTimeZone()`
+- **Logical functions** -- `if()`, `equals()`, `and()`, `or()`, `not()`, `greater()`
+- **Conversion functions** -- `int()`, `string()`, `json()`, `base64()`, `float()`
+
+**Example expression:**
+```
+formatDateTime(utcNow(), 'yyyy-MM-dd')
+```
+This returns today's date formatted as "2026-03-27".
+
+<KeyTerm term="Dynamic Content">Data outputs from previous steps in a flow that can be inserted into subsequent actions using a visual picker panel. Dynamic content eliminates the need to write expressions for simple data references.</KeyTerm>
+
+---
+
+## Error Handling
+
+Production-grade flows must handle errors gracefully. Power Automate provides two primary mechanisms for error handling.
+
+### Configure Run After
+
+Every action in a flow has a "Configure run after" setting that determines when the action executes relative to the preceding action. The four options are:
+
+- **is successful** (default) -- Run only if the previous action succeeded
+- **has failed** -- Run only if the previous action failed
+- **is skipped** -- Run only if the previous action was skipped
+- **has timed out** -- Run only if the previous action timed out
+
+By configuring an action to run after failure, you can build error notification paths. For example, if a "Create record" action fails, a subsequent "Send email" action configured to run after failure can alert an administrator.
+
+### Scope and Try-Catch Pattern
+
+A Scope action is a container that groups multiple actions together. Scopes enable a try-catch pattern:
+
+1. **Try scope** -- Contains the main business logic actions
+2. **Catch scope** -- Configured to run after the Try scope has failed. Contains error handling actions (send notification, log error, create incident)
+3. **Finally scope** (optional) -- Configured to run after both success and failure. Contains cleanup actions
+
+```
+[Try Scope]
+  |- Get items from SharePoint
+  |- Create record in Dataverse
+  |- Send confirmation email
+
+[Catch Scope] (run after: Try Scope has failed)
+  |- Send error notification to admin
+  |- Log error details to error tracking table
+
+[Finally Scope] (run after: Catch Scope is successful, has failed, is skipped)
+  |- Update audit log with flow completion status
+```
+
+<ExamTip>The PL-900 exam may ask how to handle errors in a flow. "Configure Run After" is the key concept. The Scope-based try-catch pattern is a best practice, but "Configure Run After" is the fundamental mechanism that makes it work.</ExamTip>
+
+<Callout type="success" title="Always Add Error Handling to Production Flows">A flow without error handling will silently fail when something goes wrong. At minimum, add a parallel branch with "Configure run after: has failed" on critical actions to send an alert email when failures occur.</Callout>
+
+---
+
+## Connectors and Connection References
+
+Every trigger and action in a flow uses a connector to communicate with an external service.
+
+### Connector Types
+
+- **Standard connectors** -- Included with a Microsoft 365 license. Examples: SharePoint, Outlook, Teams, OneDrive, Excel Online, Microsoft Forms.
+- **Premium connectors** -- Require a Power Automate premium license. Examples: Dataverse, SQL Server, HTTP, Adobe Sign, Salesforce.
+- **Custom connectors** -- Built by your organization to connect to proprietary APIs. Custom connectors are treated as premium.
+
+### Connection References
+
+A connection reference is a solution-aware link to a connector. Instead of embedding credentials directly in a flow, connection references allow you to:
+
+- Move flows between environments (dev, test, production) without reconfiguring connections
+- Share flows with other users who provide their own credentials
+- Centrally manage and update credentials when passwords change
+
+<KeyTerm term="Connector">A wrapper around an API that enables Power Automate (and Power Apps) to communicate with external services. Each connector provides triggers and actions specific to that service.</KeyTerm>
+
+---
+
+## Solution-Aware Flows and ALM
+
+For enterprise deployments, flows should be created inside Dataverse solutions. Solution-aware flows support:
+
+- **Export and import** between environments
+- **Version history** and rollback
+- **Managed and unmanaged layers** for publisher control
+- **Connection references** for environment-specific credentials
+- **Environment variables** for configuration that changes per environment (URLs, email addresses, thresholds)
+
+<Callout type="info" title="Best Practice: Always Build in Solutions">Microsoft recommends creating all production flows inside solutions. This enables proper application lifecycle management (ALM) with dev-test-prod promotion, version control, and managed deployments.</Callout>
+
+---
+
+## Key Takeaways for the PL-900 Exam
+
+- **Three cloud flow types**: automated (event trigger), instant (manual trigger), scheduled (time trigger). Know how to identify each from a scenario description.
+- **Desktop flows** use RPA to automate legacy desktop applications. Attended requires a user present; unattended runs autonomously.
+- **Business process flows** guide users through multi-stage processes in model-driven apps. They are not automation -- they are human guidance.
+- **Approvals** pause a flow until an approver responds. They integrate with Teams, Outlook, and the Power Automate app.
+- **Configure Run After** is the error handling mechanism. The Scope-based try-catch pattern groups actions for structured error handling.
+- **Connectors** are standard (included with M365), premium (paid license), or custom (built for proprietary APIs).
+- Expressions use Workflow Definition Language for string, date, logical, and conversion operations.
+- Production flows should be built inside solutions for proper ALM.

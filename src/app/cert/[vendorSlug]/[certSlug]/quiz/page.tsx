@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getVendors, getCertification } from "@/lib/content";
+import { getVendors, getCertification, getAllQuizQuestions } from "@/lib/content";
 import PracticeQuiz from "@/components/cert/PracticeQuiz";
 
 interface Props {
@@ -29,7 +29,9 @@ export default async function QuizPage({ params }: Props) {
   const cert = await getCertification(vendorSlug, certSlug);
   if (!cert) notFound();
 
-  if (cert.quizQuestions.length === 0) {
+  const allQuestions = await getAllQuizQuestions(vendorSlug, certSlug);
+
+  if (allQuestions.length === 0) {
     return (
       <p className="text-text-secondary text-center py-12">
         No quiz questions available for this certification yet.
@@ -40,9 +42,9 @@ export default async function QuizPage({ params }: Props) {
   return (
     <div className="max-w-3xl">
       <p className="text-sm text-text-secondary mb-6">
-        Test your knowledge with exam-style questions. Select an answer for each question.
+        Full practice exam with {allQuestions.length} questions from all modules. Select an answer for each question.
       </p>
-      <PracticeQuiz questions={cert.quizQuestions} />
+      <PracticeQuiz questions={allQuestions} />
     </div>
   );
 }

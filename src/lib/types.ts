@@ -36,6 +36,7 @@ export interface Module {
   label: string;
   order: number;
   sections: ModuleSection[];
+  quizQuestions?: QuizQuestion[];
 }
 
 export interface ModuleSection {
