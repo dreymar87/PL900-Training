@@ -10,19 +10,19 @@ const styles = {
   info: {
     border: "border-accent",
     bg: "bg-accent-light",
-    icon: "&#8505;",
+    icon: "\u2139",
     defaultTitle: "Note",
   },
   warning: {
     border: "border-warning",
     bg: "bg-warning-light",
-    icon: "&#9888;",
+    icon: "\u26A0",
     defaultTitle: "Warning",
   },
   success: {
     border: "border-success",
     bg: "bg-success-light",
-    icon: "&#10003;",
+    icon: "\u2713",
     defaultTitle: "Key Point",
   },
 };
@@ -32,7 +32,7 @@ export default function Callout({ type = "info", title, children }: CalloutProps
   return (
     <div className={`${s.bg} border-l-4 ${s.border} rounded-r-xl p-4 my-4`}>
       <div className="flex items-start gap-3">
-        <span className="text-lg flex-shrink-0 mt-0.5" dangerouslySetInnerHTML={{ __html: s.icon }} />
+        <span className="text-lg flex-shrink-0 mt-0.5" aria-hidden="true">{s.icon}</span>
         <div>
           <div className="font-semibold text-sm mb-1">{title ?? s.defaultTitle}</div>
           <div className="text-sm text-text-secondary leading-relaxed">{children}</div>

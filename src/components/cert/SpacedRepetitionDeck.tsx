@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import type { Flashcard } from "@/lib/types";
 import {
   type CardReview,
@@ -86,6 +86,23 @@ export default function SpacedRepetitionDeck({
     [currentCard, reviews, certSlug]
   );
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        setFlipped((f) => !f);
+      }
+      if (flipped && currentCard && e.key >= "0" && e.key <= "5") {
+        e.preventDefault();
+        handleRate(parseInt(e.key) as ReviewRating);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [flipped, currentCard, handleRate]);
+
   if (!loaded) {
     return <div className="text-text-secondary text-center py-8">Loading...</div>;
   }
@@ -121,9 +138,10 @@ export default function SpacedRepetitionDeck({
       {currentCard ? (
         <>
           {/* Card */}
-          <div
+          <button
             onClick={() => setFlipped((f) => !f)}
-            className="cursor-pointer select-none"
+            className="w-full cursor-pointer select-none text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-2xl"
+            aria-label={flipped ? "Click to see question" : "Click to reveal answer"}
           >
             <div
               className={`relative min-h-[220px] rounded-2xl border-2 p-8 flex items-center justify-center text-center transition-all duration-300 ${
@@ -142,11 +160,11 @@ export default function SpacedRepetitionDeck({
               </div>
               {!flipped && (
                 <div className="absolute bottom-4 right-4 text-xs text-text-muted">
-                  Click to reveal
+                  Space to reveal
                 </div>
               )}
             </div>
-          </div>
+          </button>
 
           {/* Rating buttons (only when flipped) */}
           {flipped && (

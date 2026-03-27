@@ -12,8 +12,8 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       if (item) {
         setStoredValue(JSON.parse(item));
       }
-    } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
+    } catch {
+      // Silently handle corrupted localStorage data
     }
     setIsLoaded(true);
   }, [key]);
@@ -25,8 +25,8 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
           value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      } catch (error) {
-        console.warn(`Error setting localStorage key "${key}":`, error);
+      } catch {
+        // Silently handle localStorage write failures
       }
     },
     [key, storedValue]

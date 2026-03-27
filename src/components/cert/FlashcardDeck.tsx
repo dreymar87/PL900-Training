@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { Flashcard } from "@/lib/types";
 
 interface FlashcardDeckProps {
@@ -29,18 +29,60 @@ export default function FlashcardDeck({ flashcards }: FlashcardDeckProps) {
     []
   );
 
-  const prev = () => goTo(currentIndex > 0 ? currentIndex - 1 : flashcards.length - 1);
-  const next = () => goTo(currentIndex < flashcards.length - 1 ? currentIndex + 1 : 0);
+  const prev = useCallback(
+    () => goTo(currentIndex > 0 ? currentIndex - 1 : flashcards.length - 1),
+    [currentIndex, flashcards.length, goTo]
+  );
+  const next = useCallback(
+    () => goTo(currentIndex < flashcards.length - 1 ? currentIndex + 1 : 0),
+    [currentIndex, flashcards.length, goTo]
+  );
 
-  const shuffle = () => {
+  const shuffle = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * flashcards.length);
     goTo(randomIndex);
-  };
+  }, [flashcards.length, goTo]);
 
   const reset = () => {
     setReviewed(new Set());
     goTo(0);
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      // Don't capture when typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      switch (e.key) {
+        case " ":
+        case "Enter":
+          e.preventDefault();
+          handleFlip();
+          break;
+        case "ArrowRight":
+        case "ArrowDown":
+          e.preventDefault();
+          next();
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          e.preventDefault();
+          prev();
+          break;
+        case "s":
+        case "S":
+          if (!e.metaKey && !e.ctrlKey) {
+            e.preventDefault();
+            shuffle();
+          }
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleFlip, next, prev, shuffle]);
 
   return (
     <div>
@@ -64,9 +106,10 @@ export default function FlashcardDeck({ flashcards }: FlashcardDeckProps) {
       </div>
 
       {/* Card */}
-      <div
+      <button
         onClick={handleFlip}
-        className="cursor-pointer select-none"
+        className="w-full cursor-pointer select-none text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-2xl"
+        aria-label={flipped ? "Click to see question" : "Click to reveal answer"}
       >
         <div
           className={`relative min-h-[240px] rounded-2xl border-2 p-8 flex items-center justify-center text-center transition-all duration-300 ${
@@ -85,10 +128,10 @@ export default function FlashcardDeck({ flashcards }: FlashcardDeckProps) {
           </div>
 
           <div className="absolute bottom-4 right-4 text-xs text-text-muted">
-            Click to {flipped ? "see question" : "reveal answer"}
+            Space to {flipped ? "see question" : "reveal answer"}
           </div>
         </div>
-      </div>
+      </button>
 
       {/* Controls */}
       <div className="flex items-center justify-between mt-6">
@@ -128,8 +171,13 @@ export default function FlashcardDeck({ flashcards }: FlashcardDeckProps) {
         </button>
       </div>
 
+      {/* Keyboard hints */}
+      <p className="text-center text-xs text-text-muted mt-4">
+        Shortcuts: Space/Enter flip &middot; Arrow keys navigate &middot; S shuffle
+      </p>
+
       {/* Card dots */}
-      <div className="flex flex-wrap justify-center gap-1.5 mt-6">
+      <div className="flex flex-wrap justify-center gap-1.5 mt-4">
         {flashcards.map((fc, i) => (
           <button
             key={fc.id}
