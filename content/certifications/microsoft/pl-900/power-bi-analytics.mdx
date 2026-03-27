@@ -1,0 +1,161 @@
+## Power BI Analytics
+
+Power BI is Microsoft's business intelligence platform that transforms raw data into interactive visualizations and actionable insights. On the PL-900 exam, Power BI questions focus on understanding the ecosystem, knowing the difference between reports and dashboards, and understanding data connectivity modes.
+
+### The Power BI Ecosystem
+
+Power BI is not a single tool but a collection of services, apps, and connectors that work together.
+
+<KeyTerm term="Power BI Desktop">A free Windows application used to connect to, transform, model, and visualize data. This is where reports are authored. It includes Power Query Editor and the DAX formula bar.</KeyTerm>
+
+<KeyTerm term="Power BI Service">The cloud-based SaaS platform (app.powerbi.com) where reports are published, dashboards are created, and content is shared with others across the organization.</KeyTerm>
+
+<KeyTerm term="Power BI Mobile">Native mobile apps for iOS, Android, and Windows devices that allow users to view and interact with reports and dashboards on the go. Mobile apps support push notifications and offline access to cached data.</KeyTerm>
+
+<KeyTerm term="Power BI Report Server">An on-premises report server for organizations that need to keep data and reports behind a corporate firewall. It supports Power BI reports, paginated reports, and KPIs. Requires Power BI Premium or SQL Server Enterprise Edition with Software Assurance.</KeyTerm>
+
+<KeyTerm term="Power BI Embedded">A service for ISVs and developers who want to embed Power BI visuals into their own custom applications. End users do not need Power BI licenses when content is embedded via the "App Owns Data" model.</KeyTerm>
+
+<ExamTip>The PL-900 exam frequently asks where reports are *created* versus where dashboards are *created*. Reports are built in Power BI Desktop (or the Service). Dashboards can ONLY be created in the Power BI Service -- never in Desktop.</ExamTip>
+
+### Data Connectivity Modes
+
+When connecting to data sources, Power BI offers three modes. Choosing the right one depends on data volume, freshness requirements, and source capabilities.
+
+| Feature | Import | DirectQuery | Live Connection |
+|---|---|---|---|
+| Data location | Copied into Power BI dataset (.pbix) | Stays in the source system | Stays in the source system |
+| Query execution | Queries run against in-memory model | Queries sent to source in real time | Queries sent to source in real time |
+| Data freshness | Requires scheduled or manual refresh | Always current (real-time) | Always current (real-time) |
+| Performance | Fastest (in-memory engine) | Depends on source performance | Depends on source performance |
+| Dataset size limit | 1 GB per dataset (Pro), 400 GB (Premium) | No Power BI size limit | No Power BI size limit |
+| DAX support | Full DAX support | Full DAX support | Limited — model defined at source |
+| Supported sources | Hundreds of connectors | Subset of connectors (SQL, SAP, etc.) | SSAS Tabular, SSAS Multidimensional, Power BI datasets |
+| Typical use case | Small-to-medium datasets, full modeling control | Large datasets that cannot be imported | Enterprise models already in Analysis Services |
+
+<Callout type="info" title="Composite Models">Power BI also supports composite models, which combine Import and DirectQuery tables in a single dataset. This is useful when you want some tables cached for performance and others queried live for freshness.</Callout>
+
+<ExamTip>If an exam question describes a scenario where data must always be up to date and the source is a SQL database, the answer is DirectQuery. If data must be up to date and the source is SQL Server Analysis Services, the answer is Live Connection.</ExamTip>
+
+### Power Query and Data Transformation
+
+<KeyTerm term="Power Query">The data transformation and preparation engine built into Power BI Desktop (and Excel). It uses a functional language called M under the hood. Users interact with it through a graphical interface called the Power Query Editor.</KeyTerm>
+
+Power Query follows an **ETL** (Extract, Transform, Load) pattern:
+
+- **Extract** — Connect to data sources such as Excel files, SQL databases, web APIs, SharePoint lists, and hundreds more.
+- **Transform** — Clean and shape data using operations like removing columns, filtering rows, splitting columns, pivoting/unpivoting, merging queries, changing data types, and adding calculated columns.
+- **Load** — Load the transformed data into the Power BI data model for analysis.
+
+Common Power Query transformations you should know:
+
+- **Remove Columns** — Eliminate unnecessary fields to reduce model size
+- **Filter Rows** — Exclude rows that are not needed (e.g., test records)
+- **Change Data Type** — Ensure columns have correct types (text, number, date)
+- **Merge Queries** — Combine two tables using a join (similar to SQL JOIN)
+- **Append Queries** — Stack rows from two or more tables with the same structure
+- **Unpivot Columns** — Convert wide-format data into tall-format for better analysis
+- **Group By** — Aggregate rows by a column (sum, count, average)
+
+<Callout type="warning" title="Applied Steps">Every transformation in Power Query is recorded as an Applied Step. Steps execute in order from top to bottom. You can reorder, edit, or delete steps at any time. This makes the transformation process fully auditable and repeatable.</Callout>
+
+### DAX Fundamentals
+
+<KeyTerm term="DAX (Data Analysis Expressions)">A formula language used in Power BI for creating calculated columns, measures, and calculated tables. DAX looks similar to Excel formulas but operates on tables and columns rather than individual cells.</KeyTerm>
+
+**Calculated Columns vs. Measures:**
+
+- **Calculated Columns** are computed row by row during data refresh and stored in the model. They consume memory and increase dataset size. Use them when you need a value for each row (e.g., a full name from first and last name columns).
+- **Measures** are computed at query time based on the filter context of the visualization. They do not consume storage. Use them for aggregations and KPIs (e.g., total sales, year-over-year growth).
+
+<ExamTip>The PL-900 exam may ask when to use a calculated column versus a measure. If the scenario involves a per-row calculation that should appear in a slicer or be used for filtering, choose calculated column. If it involves an aggregate value that changes with filter context, choose measure.</ExamTip>
+
+**Essential DAX functions:**
+
+- **SUM, AVERAGE, COUNT, MIN, MAX** — Basic aggregation functions
+- **CALCULATE** — The most powerful DAX function. It evaluates an expression in a modified filter context. For example: `CALCULATE(SUM(Sales[Amount]), Sales[Region] = "West")` returns total sales only for the West region.
+- **FILTER** — Returns a table that has been filtered. Often used inside CALCULATE to apply complex filters.
+- **ALL** — Removes filters from a table or column. Useful for calculating percentages of total.
+- **RELATED** — Pulls a value from a related table (follows a many-to-one relationship).
+- **DISTINCTCOUNT** — Counts unique values in a column.
+
+<DidYouKnow>CALCULATE is often called the "Swiss Army knife" of DAX. Nearly every advanced measure uses CALCULATE to manipulate filter context. Microsoft estimates that understanding CALCULATE alone covers a significant portion of real-world DAX scenarios.</DidYouKnow>
+
+### Visualization Types
+
+Power BI offers a rich library of built-in visuals, plus a marketplace for custom visuals.
+
+- **Bar and Column Charts** — Compare values across categories. Horizontal bars work well when category names are long. Stacked variants show part-to-whole relationships.
+- **Line Charts** — Show trends over time. Area charts are a filled variant. Line and clustered column combo charts overlay two different measures.
+- **Pie and Donut Charts** — Show proportions of a whole. Best limited to 5-7 slices for readability. The exam may note that bar charts are generally preferred for accuracy.
+- **Map Visuals** — Display geographic data. Filled maps shade regions by value. ArcGIS maps and Azure Maps provide advanced geospatial capabilities.
+- **Matrix** — A pivot-table-style visual that displays data in rows and columns with subtotals and drill-down. Supports hierarchies and conditional formatting.
+- **KPI Visual** — Shows a value against a target with a trend indicator. Requires a base value, a target value, and a trend axis.
+- **Decomposition Tree** — An AI-powered visual that lets users decompose a measure across multiple dimensions to find root causes. Supports both manual and automatic analysis.
+- **Tables** — Simple tabular format showing raw data rows with sorting and conditional formatting.
+- **Cards and Multi-row Cards** — Display a single aggregate number prominently (e.g., total revenue).
+- **Slicers** — Interactive filter controls that users click to filter other visuals on the page.
+
+<Callout type="info" title="Custom Visuals">Power BI AppSource offers hundreds of certified custom visuals built by third-party developers. Certified visuals have been reviewed by Microsoft for security and quality. Organizations can also develop their own custom visuals using the Power BI Visuals SDK.</Callout>
+
+### Reports vs. Dashboards
+
+This distinction is critical for the PL-900 exam.
+
+| Feature | Report | Dashboard |
+|---|---|---|
+| Creation location | Power BI Desktop or Power BI Service | Power BI Service ONLY |
+| Number of pages | Can have multiple pages | Single canvas (one page) |
+| Data sources | Single dataset per report | Can pin visuals from multiple reports/datasets |
+| Interactivity | Fully interactive — filters, slicers, drill-through, cross-highlighting | Limited interactivity — clicking a tile navigates to the source report |
+| Natural language Q&A | Not directly on report page | Q&A box available at the top of dashboard |
+| Alerts | Cannot set data alerts on reports | Can set data alerts on dashboard tiles (cards, gauges, KPIs) |
+| Underlying data | Can explore underlying data tables | Cannot explore underlying data directly |
+| Subscriptions | Can subscribe to report pages | Can subscribe to dashboards |
+
+<ExamTip>A common exam question format: "A user wants to see visuals from three different reports on a single screen." The answer is a dashboard, because dashboards can pin tiles from multiple reports. Another common question: "A user wants to set an alert when sales drop below a threshold." The answer is a dashboard tile alert.</ExamTip>
+
+### Workspaces, Apps, and Sharing
+
+<KeyTerm term="Workspace">A collaborative area in the Power BI Service where teams create and manage collections of reports, dashboards, and datasets. Every user has a personal "My Workspace" for private content. Shared workspaces require Power BI Pro or Premium Per User licenses for all members.</KeyTerm>
+
+<KeyTerm term="Power BI App">A packaged, read-only collection of dashboards and reports published from a workspace. Apps provide a simplified, curated experience for end users without exposing them to the workspace itself.</KeyTerm>
+
+**Sharing mechanisms in Power BI:**
+
+- **Direct sharing** — Share individual reports or dashboards with specific users via email or link. Requires Pro or PPU licenses for both sender and recipient (unless content is in a Premium capacity).
+- **Workspace access** — Grant users roles (Admin, Member, Contributor, Viewer) on the workspace itself.
+- **Apps** — Publish a workspace as an app for broad distribution. Best for distributing finalized content to large audiences.
+- **Publish to web** — Generate a public embed code. Anyone with the link can view the content without authentication. This is for public data only and should never be used for sensitive information.
+- **Embed in Teams, SharePoint, or custom apps** — Integrate Power BI content directly into the tools users already work in.
+
+<Callout type="warning" title="Licensing for Sharing">Sharing content always requires the author to have a Power BI Pro or Premium Per User license. Recipients also need Pro/PPU unless the content resides in a Premium capacity workspace, in which case free users can view it.</Callout>
+
+### Row-Level Security (RLS)
+
+<KeyTerm term="Row-Level Security (RLS)">A Power BI feature that restricts data access at the row level based on the logged-in user's identity. RLS ensures that different users see only the data they are authorized to view, even when accessing the same report.</KeyTerm>
+
+**How RLS works:**
+
+1. **Define roles** in Power BI Desktop using DAX filter expressions. For example, a role called "West Region" might include the filter `[Region] = "West"`.
+2. **Assign users** to roles in the Power BI Service after publishing the report.
+3. When a user opens the report, Power BI evaluates the DAX filters for their assigned role and shows only the rows that pass the filter.
+
+**Static vs. Dynamic RLS:**
+
+- **Static RLS** — Roles have hardcoded filter values. You create one role per group of users (e.g., separate roles for East, West, North, South).
+- **Dynamic RLS** — Uses the `USERPRINCIPALNAME()` DAX function to match the logged-in user's email against a column in the data. This approach scales better because you maintain a single role and a security mapping table.
+
+<ExamTip>RLS is defined in Power BI Desktop but roles are assigned to users in the Power BI Service. The exam may test whether you know that both steps are required for RLS to function. Also note that workspace Admins and Members always see all data regardless of RLS roles — RLS only applies to Viewers.</ExamTip>
+
+<DidYouKnow>Power BI also supports Object-Level Security (OLS), which hides entire tables or columns from specific users. While RLS filters rows, OLS hides structural elements of the model entirely. OLS requires a Premium or PPU capacity.</DidYouKnow>
+
+### Summary of Key Concepts for the Exam
+
+- Power BI Desktop is for **authoring** reports; the Service is for **sharing, collaboration, and dashboard creation**.
+- **Import** mode copies data into Power BI; **DirectQuery** queries the source live; **Live Connection** is for Analysis Services and Power BI datasets.
+- **Power Query** handles data transformation before it reaches the model.
+- **DAX measures** calculate at query time; **calculated columns** calculate at refresh time.
+- **Reports** have multiple pages and full interactivity; **Dashboards** are single-page pin boards that can combine visuals from multiple reports.
+- **RLS** restricts row-level access and is defined in Desktop but assigned in the Service.
+- Sharing requires **Pro or Premium Per User** licenses for both author and consumer, unless content is in a **Premium capacity**.

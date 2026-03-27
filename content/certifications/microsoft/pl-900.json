@@ -56,6 +56,13 @@
           "heading": "Core Components",
           "content": "**Power Apps:** Build custom business apps. **Power Automate:** Automate workflows. **Power BI:** Analyze data and create reports. **Power Pages:** Create external websites."
         }
+      ],
+      "quizQuestions": [
+        { "id": "mq-1-1", "question": "Which Power Platform component is primarily used for creating interactive dashboards and reports?", "options": ["Power Apps", "Power Automate", "Power BI", "Power Pages"], "correctIndex": 2, "explanation": "Power BI is the analytics and visualization tool in Power Platform." },
+        { "id": "mq-1-2", "question": "A citizen developer wants to automate a repetitive task without writing code. Which component should they use?", "options": ["Power Pages", "Power Automate", "Power BI", "Dataverse"], "correctIndex": 1, "explanation": "Power Automate enables no-code/low-code workflow automation." },
+        { "id": "mq-1-3", "question": "What is AI Builder in the context of Power Platform?", "options": ["A code editor for custom AI models", "A pre-built AI capability that integrates with Power Apps and Power Automate", "A separate Microsoft product for machine learning", "A Power BI visualization type"], "correctIndex": 1, "explanation": "AI Builder provides ready-to-use AI models for document processing, prediction, and more, directly within Power Platform." },
+        { "id": "mq-1-4", "question": "Which licensing model allows an organization to license a specific app for a group of users rather than licensing each user individually?", "options": ["Per-user plan", "Per-app plan", "Per-flow plan", "Developer plan"], "correctIndex": 1, "explanation": "The per-app plan licenses access to a specific app, which can be more cost-effective for targeted use cases." },
+        { "id": "mq-1-5", "question": "What is a key advantage of Power Platform over traditional custom development?", "options": ["It provides more control over server infrastructure", "It enables faster solution delivery with low-code tools", "It requires no internet connection", "It supports only Microsoft data sources"], "correctIndex": 1, "explanation": "Power Platform's low-code approach significantly reduces development time compared to traditional coding." }
       ]
     },
     {
@@ -72,6 +79,13 @@
           "heading": "Key Features",
           "content": "Drag-drop components, formulas & expressions, connectors to external data, offline capability, mobile-responsive."
         }
+      ],
+      "quizQuestions": [
+        { "id": "mq-2-1", "question": "A company needs an app with a highly customized UI for tablet-based field workers. Which app type is most appropriate?", "options": ["Model-driven app", "Canvas app", "Power Pages site", "Power BI dashboard"], "correctIndex": 1, "explanation": "Canvas apps provide pixel-level control over the UI, making them ideal for custom layouts on specific devices." },
+        { "id": "mq-2-2", "question": "What is the default delegation limit for non-delegable data sources in Power Apps?", "options": ["100 records", "500 records", "2,000 records", "Unlimited"], "correctIndex": 1, "explanation": "Power Apps has a default delegation limit of 500 records. Non-delegable queries only process up to this limit locally." },
+        { "id": "mq-2-3", "question": "Which Power Apps function is used to write data back to a data source?", "options": ["Filter()", "LookUp()", "Patch()", "Navigate()"], "correctIndex": 2, "explanation": "Patch() creates or modifies records in a data source." },
+        { "id": "mq-2-4", "question": "Model-driven apps are primarily built on top of which service?", "options": ["SharePoint", "Dataverse", "Azure SQL", "OneDrive"], "correctIndex": 1, "explanation": "Model-driven apps require Dataverse as their data foundation and automatically generate UI based on the data model." },
+        { "id": "mq-2-5", "question": "Which control in a canvas app is used to display a scrollable list of records?", "options": ["Form control", "Gallery control", "Button control", "Timer control"], "correctIndex": 1, "explanation": "The Gallery control displays a list of records with a customizable template for each item." }
       ]
     },
     {
@@ -88,6 +102,13 @@
           "heading": "Common Actions",
           "content": "Create/update records, send emails, approve requests, condition branching, loop through data, call APIs."
         }
+      ],
+      "quizQuestions": [
+        { "id": "mq-3-1", "question": "A manager wants a flow that runs every Friday at 5 PM to generate a weekly report. Which flow type should be used?", "options": ["Automated cloud flow", "Instant cloud flow", "Scheduled cloud flow", "Desktop flow"], "correctIndex": 2, "explanation": "Scheduled flows run at specified times using a recurrence trigger." },
+        { "id": "mq-3-2", "question": "What is the purpose of the 'Configure Run After' setting in Power Automate?", "options": ["To set a flow's run schedule", "To specify what happens when a previous action fails, times out, or is skipped", "To configure user permissions", "To set the flow's priority level"], "correctIndex": 1, "explanation": "Configure Run After lets you control flow behavior based on the outcome of previous actions, enabling error handling." },
+        { "id": "mq-3-3", "question": "Which type of Power Automate flow is used to automate tasks on legacy desktop applications?", "options": ["Automated cloud flow", "Business process flow", "Desktop flow (RPA)", "Instant cloud flow"], "correctIndex": 2, "explanation": "Desktop flows use robotic process automation to interact with legacy desktop and web applications." },
+        { "id": "mq-3-4", "question": "What triggers an automated cloud flow?", "options": ["A user presses a button", "A scheduled time interval", "An event in a connected service (e.g., new email, record created)", "A manual API call"], "correctIndex": 2, "explanation": "Automated flows are triggered by events in connected services, such as when a new item is created or modified." },
+        { "id": "mq-3-5", "question": "In Power Automate, what action type is used to route a document for manager sign-off?", "options": ["Send email", "Create record", "Approval", "HTTP request"], "correctIndex": 2, "explanation": "The Approval action type creates approval requests that can be assigned to one or more approvers." }
       ]
     },
     {
@@ -104,6 +125,13 @@
           "heading": "Components",
           "content": "**Power BI Desktop:** Create reports. **Power BI Service:** Publish & share. **Mobile Apps:** View on-the-go."
         }
+      ],
+      "quizQuestions": [
+        { "id": "mq-4-1", "question": "What is the key difference between a Power BI report and a Power BI dashboard?", "options": ["Reports are interactive with multiple pages; dashboards are single-page with pinned tiles from multiple reports", "Dashboards can be exported to PDF; reports cannot", "Reports are only available in Power BI Desktop", "Dashboards support real-time data; reports do not"], "correctIndex": 0, "explanation": "Reports are multi-page, interactive documents. Dashboards are single-page collections of pinned visuals from one or more reports." },
+        { "id": "mq-4-2", "question": "Which Power BI connectivity mode stores a copy of data within the Power BI model?", "options": ["DirectQuery", "Live Connection", "Import", "Streaming"], "correctIndex": 2, "explanation": "Import mode loads data into the Power BI data model, enabling fast queries but requiring scheduled refreshes." },
+        { "id": "mq-4-3", "question": "What language is used to create measures and calculated columns in Power BI?", "options": ["SQL", "M (Power Query)", "DAX", "Python"], "correctIndex": 2, "explanation": "DAX (Data Analysis Expressions) is used for calculations, measures, and calculated columns in the data model." },
+        { "id": "mq-4-4", "question": "Row-level security (RLS) in Power BI is used to:", "options": ["Encrypt data at rest", "Restrict which rows of data specific users can see", "Prevent users from exporting data", "Control who can edit reports"], "correctIndex": 1, "explanation": "RLS defines filters on tables to restrict data access based on user roles." },
+        { "id": "mq-4-5", "question": "Where do you publish Power BI reports for organizational sharing?", "options": ["SharePoint Online", "Power BI Service (app.powerbi.com)", "OneDrive for Business", "Teams directly"], "correctIndex": 1, "explanation": "Reports are published from Power BI Desktop to the Power BI Service for sharing through workspaces and apps." }
       ]
     },
     {
@@ -120,6 +148,13 @@
           "heading": "Connectors",
           "content": "Connect to 600+ apps: Excel, SharePoint, SQL Server, Salesforce, Teams, Slack, and more. Pre-built integrations reduce custom code."
         }
+      ],
+      "quizQuestions": [
+        { "id": "mq-5-1", "question": "Which Dataverse table type allows you to access data from an external source without copying it into Dataverse?", "options": ["Standard table", "Custom table", "Virtual table", "Activity table"], "correctIndex": 2, "explanation": "Virtual tables map to external data sources and display data in real-time without storing it in Dataverse." },
+        { "id": "mq-5-2", "question": "What type of relationship should you create when one account can have many contacts?", "options": ["Many-to-many", "One-to-many", "One-to-one", "Polymorphic lookup"], "correctIndex": 1, "explanation": "One-to-many relationships link a parent record (account) to multiple child records (contacts)." },
+        { "id": "mq-5-3", "question": "Which connector tier typically requires an additional Power Platform license?", "options": ["Standard connectors", "Premium connectors", "Built-in connectors", "Free connectors"], "correctIndex": 1, "explanation": "Premium connectors (like SQL Server, Salesforce, HTTP) require a Power Apps or Power Automate premium license." },
+        { "id": "mq-5-4", "question": "What is the purpose of business rules in Dataverse?", "options": ["To create workflow automations", "To apply validation and set field values without code", "To define table relationships", "To manage user permissions"], "correctIndex": 1, "explanation": "Business rules provide no-code logic to validate data, show error messages, set field values, and control visibility." },
+        { "id": "mq-5-5", "question": "To connect Power Platform to an on-premises SQL Server database, what do you need?", "options": ["A custom connector only", "An on-premises data gateway", "A VPN connection", "Azure ExpressRoute"], "correctIndex": 1, "explanation": "The on-premises data gateway acts as a bridge between cloud services and on-premises data sources." }
       ]
     },
     {
@@ -136,6 +171,13 @@
           "heading": "Admin Center",
           "content": "Manage environments, set policies, monitor usage, handle support, configure storage, view analytics."
         }
+      ],
+      "quizQuestions": [
+        { "id": "mq-6-1", "question": "A DLP policy classifies connectors into which groups?", "options": ["Free and Premium", "Internal and External", "Business, Non-Business, and Blocked", "Standard and Custom"], "correctIndex": 2, "explanation": "DLP policies organize connectors into Business, Non-Business, and Blocked groups to control data flow between services." },
+        { "id": "mq-6-2", "question": "Which environment type should be used for testing changes before deploying to production?", "options": ["Default environment", "Developer environment", "Sandbox environment", "Trial environment"], "correctIndex": 2, "explanation": "Sandbox environments are designed for testing and can be reset, making them ideal for pre-production validation." },
+        { "id": "mq-6-3", "question": "What is the Center of Excellence (CoE) Starter Kit?", "options": ["A licensing plan for enterprises", "A set of pre-built tools for monitoring and governing Power Platform adoption", "A training certification program", "A type of Dataverse environment"], "correctIndex": 1, "explanation": "The CoE Starter Kit provides dashboards, automations, and governance tools to manage Power Platform at scale." },
+        { "id": "mq-6-4", "question": "In solution-based ALM, what is the difference between managed and unmanaged solutions?", "options": ["Managed solutions can be edited in the target; unmanaged cannot", "Unmanaged solutions can be edited in the target; managed cannot", "There is no difference", "Managed solutions are for development; unmanaged are for production"], "correctIndex": 1, "explanation": "Unmanaged solutions are for development (editable). Managed solutions are for deployment (locked, can only be uninstalled)." },
+        { "id": "mq-6-5", "question": "Which Office 365 license includes seeded access to Power Apps and Power Automate?", "options": ["Office 365 E1 and above", "Only Office 365 E5", "Office 365 does not include Power Platform", "Only Microsoft 365 Business Premium"], "correctIndex": 0, "explanation": "Office 365 E1, E3, and E5 licenses include seeded Power Apps and Power Automate capabilities for standard connectors." }
       ]
     }
   ],

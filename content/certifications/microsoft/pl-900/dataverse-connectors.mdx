@@ -1,0 +1,175 @@
+## Microsoft Dataverse and Connectors
+
+Microsoft Dataverse is the backbone of the Power Platform. It provides the data layer that Power Apps, Power Automate, Power Virtual Agents, and Dynamics 365 all rely on. Understanding Dataverse's architecture and the connector ecosystem is essential for the PL-900 exam.
+
+### What Is Microsoft Dataverse?
+
+<KeyTerm term="Microsoft Dataverse">A cloud-scale, secure, and compliant relational data store built on top of Azure SQL. It provides standardized tables, columns, relationships, business logic, and security — all accessible through a set of APIs and connectors without requiring direct database management.</KeyTerm>
+
+Dataverse is more than just a database. It includes:
+
+- **Standardized data model** — Common Data Model (CDM) provides a shared schema of standard tables (Account, Contact, Activity, etc.) that Microsoft apps and third-party solutions all understand.
+- **Built-in business logic** — Business rules, calculated columns, rollup columns, and workflows execute at the platform level without writing code.
+- **Security and compliance** — Role-based security, field-level security, audit logging, and encryption at rest and in transit.
+- **Storage** — Each environment gets a base allocation of database storage (typically 1 GB), file storage, and log storage. Additional capacity can be purchased.
+- **API access** — RESTful Web API (OData), SDK for .NET, and connectors for Power Platform and Logic Apps.
+
+<DidYouKnow>Dataverse was previously known as the Common Data Service (CDS). Microsoft rebranded it in November 2020. Exam questions may still reference the older name, so be aware of both terms.</DidYouKnow>
+
+### Tables in Dataverse
+
+Tables are the primary structure for storing data in Dataverse. They are analogous to tables in a relational database.
+
+**Types of tables:**
+
+<KeyTerm term="Standard Tables">Pre-built tables provided by Microsoft as part of Dataverse (e.g., Account, Contact, Case, Activity). These tables come with predefined columns, relationships, forms, and views. They can be customized by adding columns or modifying forms but cannot be deleted.</KeyTerm>
+
+<KeyTerm term="Custom Tables">Tables created by makers to store organization-specific data. Custom tables can have any schema and support all Dataverse features including business rules, relationships, views, forms, and security.</KeyTerm>
+
+<KeyTerm term="Virtual Tables">Tables that map to data stored in external sources (such as SQL Server, SharePoint, or an OData service) without copying the data into Dataverse. Virtual tables appear alongside standard and custom tables but the data remains in the external system. They have some limitations — for example, they do not support business rules or calculated columns.</KeyTerm>
+
+**Column data types** include: Text (single line, multi-line, rich text, email, URL, phone), Number (whole number, decimal, float, currency), Date/Time, Lookup (foreign key relationship), Choice (option set — local or global), Yes/No (Boolean), File, Image, and Customer (polymorphic lookup to Account or Contact).
+
+<ExamTip>The exam may ask about the difference between standard and custom tables. Key point: standard tables are provided out of the box and cannot be deleted. Custom tables are created by makers. Both support the same features (business rules, relationships, security). Virtual tables are read/write but have limited business logic support.</ExamTip>
+
+### Relationships
+
+Dataverse supports relational data modeling through three types of relationships.
+
+**One-to-Many (1:N)** — The most common relationship. A single record in the parent table can be related to many records in the child table. For example, one Account can have many Contacts. The child table gets a Lookup column pointing to the parent.
+
+**Many-to-Many (N:N)** — Both tables can have multiple related records on each side. Dataverse creates an intersect (junction) table behind the scenes to manage the relationship. For example, a Contact can be associated with multiple Projects, and a Project can have multiple Contacts.
+
+**Polymorphic Lookups** — A special type of lookup that can reference records in more than one table. The built-in Customer lookup column is a polymorphic lookup that can point to either an Account or a Contact. The Regarding lookup on Activity tables can point to almost any table.
+
+<Callout type="info" title="Cascading Behavior">When you define a one-to-many relationship, you configure cascading behavior for operations like Assign, Share, Delete, Reparent, and Merge. For example, you can configure that when a parent Account is deleted, all child Contact records are also deleted (Cascade All) or that child records are kept but the lookup is cleared (Remove Link).</Callout>
+
+### Business Rules
+
+<KeyTerm term="Business Rules">No-code/low-code rules that enforce validation, set default values, show/hide fields, set field requirement levels, and display error messages — all without writing any code. Business rules are defined on a table and can be scoped to a specific form or to the entire table (including server-side enforcement).</KeyTerm>
+
+Business rules support the following actions:
+
+- **Set Field Value** — Automatically populate a field based on conditions
+- **Set Business Required** — Make a field required or optional based on conditions
+- **Set Visibility** — Show or hide a field on a form based on conditions
+- **Set Default Value** — Assign a default value when a record is created
+- **Lock/Unlock Field** — Make a field read-only based on conditions
+- **Show Error Message** — Display a validation error on a field
+- **Recommendation** — Suggest a value (with user acceptance)
+
+<Callout type="warning" title="Scope Matters">If a business rule is scoped to a specific form, it only runs when that form is used. If scoped to "Entity" (table-level), it runs on the server for all clients including API calls, Power Automate flows, and canvas apps. For maximum enforcement, use table-level scope.</Callout>
+
+### Dataverse Security Model
+
+Dataverse has a layered security model that gives administrators fine-grained control over who can access what data.
+
+**Security Roles** — Define what a user can do (Create, Read, Write, Delete, Append, Append To, Assign, Share) at different access levels:
+- **User (Basic)** — Access only to records the user owns
+- **Business Unit** — Access to records owned by anyone in the user's business unit
+- **Parent: Child Business Unit** — Access to records in the user's business unit and all child business units
+- **Organization** — Access to all records in the environment
+
+**Business Units** — Hierarchical organizational units that segment data access. Every user belongs to exactly one business unit. Business units are used in combination with security roles to restrict visibility.
+
+**Teams** — Groups of users that can own records and share security roles. There are three types:
+- **Owner teams** — Can own records. Created manually.
+- **Access teams** — Granted access to specific records dynamically. Do not own records.
+- **AAD Group teams** — Membership driven by Azure Active Directory (Entra ID) groups. Useful for automatic provisioning.
+
+**Field-Level Security** — Restricts access to specific columns (fields) within a table. For example, you might allow all users to read an Employee table but restrict the Salary column so only HR users can see it. Field-level security is configured through Field Security Profiles.
+
+<ExamTip>The PL-900 exam loves to test the security hierarchy: Environment-level access is controlled by assigning users to environments. Within an environment, security roles define CRUD permissions at different access levels. Field-level security provides column-level restrictions on top of security roles. Remember that security roles are additive — if a user has multiple roles, they get the union of all privileges.</ExamTip>
+
+### Audit Logging
+
+Dataverse includes built-in audit logging that tracks changes to records and user access.
+
+- **Entity-level auditing** — Enable auditing on specific tables to track create, update, and delete operations.
+- **Field-level auditing** — Track changes to specific columns, capturing old and new values.
+- **User access auditing** — Log when users sign in to the environment.
+- **Audit log retention** — Logs are retained for a configurable period (default is 30 days, extendable to years). Logs consume log storage capacity.
+
+<Callout type="info" title="Compliance">Dataverse audit logs can be exported to Microsoft 365 Compliance Center for long-term retention and analysis. This integration supports regulatory compliance requirements like GDPR, HIPAA, and SOX.</Callout>
+
+### Connector Types
+
+Connectors are the bridge between Power Platform services and external data sources and APIs. Every data connection in Power Apps, Power Automate, and Power Virtual Agents uses a connector.
+
+| Feature | Standard Connectors | Premium Connectors | Custom Connectors |
+|---|---|---|---|
+| Cost | Included with most Power Platform licenses (Office 365, per-app, per-user) | Require Power Apps/Automate per-user plan or per-app plan | Require Premium licensing (same as premium connectors) |
+| Examples | SharePoint, Outlook, Excel, Teams, OneDrive, Twitter, RSS | SQL Server, Dataverse, HTTP with Azure AD, Salesforce, Adobe Sign, SAP | Any REST API you define via OpenAPI specification |
+| Number available | 400+ standard connectors | 50+ premium connectors | Unlimited (you create them) |
+| Management | Managed by Microsoft | Managed by Microsoft | Created and managed by your organization |
+| Certification | N/A | N/A | Can be submitted to Microsoft for certification and public listing |
+| DLP classification | Can be classified as Business or Non-Business | Can be classified as Business or Non-Business | Can be classified as Business, Non-Business, or Blocked |
+
+<ExamTip>The licensing question is one of the most commonly tested connector topics. Remember: using ANY premium connector in a Power App or Power Automate flow means the entire app/flow requires premium licensing. You cannot mix standard-only and premium licensing within a single app. The Dataverse connector is a PREMIUM connector.</ExamTip>
+
+### Dataverse vs. SharePoint for Data Storage
+
+Many PL-900 questions present scenarios where you must choose the right data store. Here is how Dataverse compares to SharePoint lists.
+
+| Feature | Microsoft Dataverse | SharePoint Lists |
+|---|---|---|
+| Data model | Relational with defined relationships, lookups, and referential integrity | Flat list structure with basic lookups (no referential integrity) |
+| Record capacity | Millions of rows with enterprise performance | Practical limit of ~12,000 items (30,000 threshold for views) |
+| Security | Role-based security, business units, field-level security | SharePoint permissions (site, list, item level) |
+| Business logic | Business rules, real-time workflows, calculated/rollup columns | Column validation, basic list-level validation |
+| File storage | File and image columns with configurable size limits | Native document libraries with versioning and co-authoring |
+| Licensing | Premium connector — requires Dataverse-enabled license | Standard connector — included with Office 365 |
+| Offline support | Supported in canvas apps and model-driven apps | Limited offline support |
+| ALM | Solution-aware — schema travels in solutions for dev/test/prod | Not solution-aware — must be recreated per environment |
+| Best for | Enterprise apps, complex data models, Dynamics 365 integration | Simple lists, document management, team collaboration |
+
+<ExamTip>If an exam scenario describes a simple app with a few hundred records and the organization only has Office 365 licenses, SharePoint is likely the right answer. If the scenario involves complex relationships, security requirements, or thousands of records, Dataverse is the right choice.</ExamTip>
+
+### Custom Connectors
+
+When a pre-built connector does not exist for your API, you can create a custom connector.
+
+**Creation methods:**
+- **From an OpenAPI (Swagger) definition** — Import a JSON or YAML file that describes the API endpoints, parameters, and responses.
+- **From a Postman collection** — Import an exported Postman collection.
+- **From blank** — Define the API endpoints, request/response schemas, and authentication manually in the connector wizard.
+- **From Azure services** — Create connectors directly from Azure API Management, Azure Functions, or Azure Logic Apps.
+
+**Authentication types supported:**
+- No authentication (anonymous)
+- API Key (header or query parameter)
+- Basic authentication (username/password)
+- OAuth 2.0 (Azure AD, Google, GitHub, generic OAuth)
+- Windows Authentication (via on-premises data gateway)
+
+<Callout type="info" title="Custom Connector Sharing">Custom connectors are scoped to an environment by default. To share a custom connector, you can add it to a Dataverse solution and deploy it across environments, or you can share it with specific users within the same environment. For organization-wide distribution, consider submitting the connector for Microsoft certification.</Callout>
+
+### On-Premises Data Gateway
+
+<KeyTerm term="On-Premises Data Gateway">A bridge application installed on a local server that provides secure data transfer between on-premises data sources and Power Platform cloud services. The gateway enables Power Apps, Power Automate, Power BI, and Azure Logic Apps to reach data behind the corporate firewall without opening inbound ports.</KeyTerm>
+
+**Two modes:**
+
+- **Standard mode (Enterprise gateway)** — Supports multiple users, multiple data sources, and is managed centrally. Required for production use. Can be clustered for high availability.
+- **Personal mode** — Single user only. Primarily used for Power BI data refresh by individual analysts. Cannot be shared or managed centrally.
+
+**How the gateway works:**
+1. The cloud service encrypts and sends the query to the Azure Service Bus.
+2. The on-premises gateway picks up the query from the Service Bus.
+3. The gateway executes the query against the on-premises data source.
+4. Results are encrypted and sent back through the Service Bus to the cloud service.
+
+<Callout type="warning" title="Gateway Requirements">The gateway must be installed on a machine that is always on and connected to the internet. It should not be installed on a laptop or a machine that goes to sleep. For production workloads, install the gateway on a dedicated server and consider setting up a gateway cluster for fault tolerance.</Callout>
+
+<DidYouKnow>The on-premises data gateway uses Azure Relay (part of Azure Service Bus) for communication. All data is encrypted in transit using TLS 1.2, and the gateway never stores data — it only acts as a conduit between the on-premises source and the cloud service.</DidYouKnow>
+
+### Summary of Key Concepts for the Exam
+
+- **Dataverse** is a cloud-scale relational data store with built-in security, business logic, and API access.
+- **Standard tables** come pre-built; **custom tables** are created by makers; **virtual tables** map to external data without copying it.
+- The security model layers: environment access, security roles (with four access levels), field-level security profiles.
+- **Security roles are additive** — users get the union of all assigned roles.
+- **Standard connectors** are included with base licenses; **premium connectors** (including Dataverse) require upgraded licensing.
+- **Custom connectors** are built from OpenAPI definitions and require premium licensing.
+- The **on-premises data gateway** bridges cloud services to behind-the-firewall data sources.
+- For simple apps with Office 365 licensing, choose **SharePoint**. For complex enterprise apps, choose **Dataverse**.

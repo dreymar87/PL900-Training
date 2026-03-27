@@ -1,0 +1,186 @@
+## Governance and Administration
+
+Governing the Power Platform is about balancing empowerment with control. Organizations need citizen developers to build solutions quickly, but IT must ensure security, compliance, and manageability. The PL-900 exam tests your understanding of admin tools, environment strategy, DLP policies, solution lifecycle management, and licensing.
+
+### Power Platform Admin Center
+
+<KeyTerm term="Power Platform Admin Center">The centralized web portal (admin.powerplatform.microsoft.com) where administrators manage environments, view analytics, configure DLP policies, monitor capacity, and oversee the health of the entire Power Platform tenant.</KeyTerm>
+
+Key capabilities of the Admin Center:
+
+- **Environment management** — Create, edit, delete, copy, reset, and back up environments.
+- **DLP policies** — Define which connectors can be used together within environments.
+- **Analytics** — View adoption metrics, usage statistics, and error reports across Power Apps, Power Automate, and Dataverse.
+- **Capacity management** — Monitor database, file, and log storage consumption across all environments.
+- **Data integration** — Manage data gateways, connection references, and dataflows.
+- **Resources** — View all apps, flows, chatbots, and AI models across the tenant.
+- **User management** — Assign security roles, manage environment access, and review license assignments.
+- **Billing** — View and manage Power Platform license allocations (when integrated with Microsoft 365 admin center).
+
+<Callout type="info" title="Admin Roles">Three key admin roles can access the Power Platform Admin Center: Global Administrator, Power Platform Administrator, and Dynamics 365 Administrator. The Power Platform Administrator role is the least-privileged option for managing Power Platform without broader tenant access.</Callout>
+
+### Environment Types
+
+Environments are containers that isolate Power Platform resources — apps, flows, Dataverse databases, bots, and connections. Choosing the right environment type is fundamental to a governance strategy.
+
+<ComparisonTable headers={["Environment Type", "Purpose", "Dataverse Included", "Lifecycle", "Key Details"]} rows={[["Default", "Every tenant gets one automatically", "Yes (created on first use)", "Permanent — cannot be deleted or reset", "All licensed users have the Environment Maker role. Intended for personal productivity. Cannot be used for ALM solutions."], ["Production", "Run business-critical apps and flows", "Yes", "Permanent until manually deleted", "Full Dataverse capabilities, backup/restore, solution deployment. Requires paid Dataverse capacity."], ["Sandbox", "Development, testing, and QA", "Yes", "Permanent until deleted or reset", "Can be reset to a clean state. Can be copied from Production for testing. Does not count against production capacity quotas separately."], ["Developer", "Individual maker development and learning", "Yes", "Permanent until deleted", "Free — each user can create up to 3 developer environments. Limited to 2 GB database storage. Not for production use."], ["Trial", "Short-term evaluation and proof of concept", "Yes", "Auto-deleted after 30 days (subscription-based trials last longer)", "Free for evaluation. Data is deleted when the trial expires. Cannot be converted to production."]]} />
+
+<ExamTip>The Default environment is a common trap in exam questions. Remember: every tenant has exactly one Default environment that cannot be deleted. All users in the organization automatically have access to it. Best practice is to NOT use the Default environment for production apps — instead, create dedicated Production environments with controlled access.</ExamTip>
+
+**Environment strategy best practices:**
+
+- Create separate environments for **Development**, **Test/QA**, and **Production** to support proper ALM.
+- Restrict who can create Production and Sandbox environments using tenant-level settings in the Admin Center.
+- Use the Default environment only for personal productivity and experimentation.
+- Assign a **Dataverse database** to each environment that needs structured data storage, business logic, or security.
+
+<Callout type="warning" title="Environment Provisioning">Creating a Production or Sandbox environment with Dataverse consumes capacity from your tenant's pool. Monitor your available capacity in the Admin Center to avoid provisioning failures. Developer environments provide free Dataverse capacity for individual makers.</Callout>
+
+### Data Loss Prevention (DLP) Policies
+
+<KeyTerm term="DLP Policy">A governance mechanism that controls which connectors can be used together in Power Apps and Power Automate flows. DLP policies prevent data leakage by ensuring that business-critical connectors cannot share data with non-approved consumer or social connectors.</KeyTerm>
+
+DLP policies classify connectors into three groups:
+
+**Business** — Connectors that handle organizational or sensitive data. Connectors in this group can only share data with other connectors in the same group. Examples: SharePoint, Dataverse, SQL Server, Dynamics 365.
+
+**Non-Business** — Connectors for personal or general-purpose use. These connectors can only communicate with other Non-Business connectors. Examples: Twitter, Gmail, personal OneDrive.
+
+**Blocked** — Connectors that are completely prohibited from use in apps and flows covered by the policy. Any app or flow that tries to use a blocked connector will fail.
+
+<Callout type="info" title="Default Classification">When a new connector is released by Microsoft, it lands in the Non-Business group by default. Administrators should regularly review new connectors and reclassify them as appropriate. You can configure the default group for new connectors in the DLP policy settings.</Callout>
+
+**The core rule:** A Power App or Power Automate flow cannot use connectors from both the Business and Non-Business groups simultaneously. If a maker tries to add a SharePoint connector (Business) and a Twitter connector (Non-Business) to the same app, the policy will block it.
+
+**DLP policy scoping:**
+
+- **Tenant-level policies** — Apply to all environments in the tenant, or to a selected list of environments. Administrators can include or exclude specific environments.
+- **Environment-level policies** — Created by environment admins and apply only to a single environment.
+- **Multiple policies** — When multiple DLP policies apply to an environment, the most restrictive combination wins. A connector must be allowed by ALL applicable policies to be usable.
+
+<ExamTip>DLP scoping is heavily tested on the PL-900 exam. Key facts to remember: (1) Tenant-level DLP policies can include or exclude specific environments. (2) Environment-level DLP policies apply only to their own environment. (3) When multiple policies overlap, the MOST RESTRICTIVE combination applies — connectors must be allowed by every policy. (4) DLP policies apply to Power Apps and Power Automate but do NOT directly govern Power BI data connections.</ExamTip>
+
+**Configuring DLP policies — step by step:**
+
+1. Navigate to the Power Platform Admin Center and select **Data Policies**.
+2. Create a new policy and give it a descriptive name.
+3. Assign connectors to the **Business**, **Non-Business**, or **Blocked** groups.
+4. Configure the default group for new connectors (recommended: Non-Business or Blocked).
+5. Define the **scope** — all environments, specific environments only, or exclude certain environments.
+6. Review and activate the policy.
+
+<DidYouKnow>DLP policies evaluate at runtime, not at design time. A maker can build an app that violates DLP policy, but the app will fail when it tries to execute a connection that crosses policy boundaries. Some DLP violations are also flagged during the save process in Power Apps Studio.</DidYouKnow>
+
+### Solution-Based Application Lifecycle Management (ALM)
+
+<KeyTerm term="Solution">A container in Dataverse used to package and transport customizations and extensions between environments. Solutions can contain apps, flows, tables, security roles, connection references, environment variables, and other components.</KeyTerm>
+
+**Managed vs. Unmanaged Solutions:**
+
+<ComparisonTable headers={["Feature", "Unmanaged Solution", "Managed Solution"]} rows={[["Purpose", "Development and customization", "Deployment to downstream environments (test, production)"], ["Editability", "All components are fully editable", "Components cannot be directly edited in the target environment"], ["Deletion behavior", "Removing a component from the solution does not delete it from the environment", "Uninstalling the solution removes all its components cleanly"], ["Layering", "Components merge into the active customization layer", "Components install as a managed layer that can be cleanly removed"], ["Use case", "Dev environment where makers build and iterate", "Test, UAT, and production environments where changes are controlled"], ["Best practice", "Never deploy unmanaged solutions to production", "Always export as managed for deployment to non-dev environments"]]} />
+
+**Solution versioning** uses a four-part number: Major.Minor.Build.Revision (e.g., 1.0.0.0). When exporting an updated solution, increment the version number to track changes over time.
+
+**The ALM workflow:**
+
+1. **Develop** in an unmanaged solution in a Development environment.
+2. **Export** the solution as managed.
+3. **Import** the managed solution into a Test/QA environment for validation.
+4. After testing, **import** the same managed solution into the Production environment.
+5. To update, make changes in the Development environment, increment the version, and repeat the export/import cycle.
+
+<Callout type="warning" title="Solution Dependencies">Solutions can depend on other solutions. For example, a custom app solution might depend on tables defined in a base solution. When importing, dependent solutions must be present in the target environment. Plan your solution architecture to minimize circular dependencies.</Callout>
+
+### Center of Excellence (CoE) Starter Kit
+
+<KeyTerm term="CoE Starter Kit">A free, open-source collection of Power Platform components published by Microsoft that helps organizations establish governance, monitor adoption, and nurture citizen development. It is not a product but a reference implementation that organizations customize to their needs.</KeyTerm>
+
+The CoE Starter Kit includes three main modules:
+
+- **Core Module** — Inventories all Power Platform resources (apps, flows, connectors, makers) into Dataverse tables. Provides a catalog of everything built across the tenant.
+- **Governance Module** — Automates compliance workflows such as identifying unused apps, flagging apps that use non-compliant connectors, sending inactivity notifications, and archiving stale resources.
+- **Nurture Module** — Supports adoption through an app catalog, a training materials library, maker assessment surveys, and a community hub for sharing best practices.
+
+<Callout type="info" title="Not a Product">The CoE Starter Kit is not an officially supported Microsoft product. It is a community-driven resource maintained by the Power CAT team. Organizations should treat it as a starting point and customize it to fit their governance requirements.</Callout>
+
+### Licensing Deep Dive
+
+Power Platform licensing is scenario-based and depends on what connectors, features, and capacity an organization needs.
+
+**Power Apps licensing:**
+
+- **Per-App Plan** — Grants a user access to one app (canvas or model-driven) and one portal. Includes Dataverse capacity. Best for users who only need one or two specific apps.
+- **Per-User Plan** — Grants a user access to unlimited apps (canvas, model-driven, and portals). Includes Dataverse capacity. Best for power users who use many apps.
+- **Pay-as-you-go** — Per-active-user pricing billed through an Azure subscription. No upfront commitment.
+
+**Power Automate licensing:**
+
+- **Per-User Plan** — Unlimited cloud flows for one user. Includes standard and premium connectors.
+- **Per-User Plan with Attended RPA** — Same as above, plus the ability to run desktop flows (Robotic Process Automation) in attended mode.
+- **Per-Flow Plan** — Licenses a specific flow for unlimited users. Sold in packs of five flows. Best for organization-wide automated processes.
+- **Process Mining** — Add-on license for process mining and task mining capabilities.
+
+**Seeded licenses (included with other Microsoft products):**
+
+- **Office 365 / Microsoft 365** — Includes the ability to create and run Power Apps and Power Automate flows with standard connectors only. Dataverse is NOT included. Custom connectors are NOT included.
+- **Dynamics 365** — Includes rights to use Power Apps and Power Automate within the context of the licensed Dynamics 365 application. Includes Dataverse capacity for Dynamics 365 data.
+
+<ComparisonTable headers={["License Type", "Standard Connectors", "Premium Connectors", "Custom Connectors", "Dataverse", "RPA"]} rows={[["Office 365 seeded", "Yes", "No", "No", "No (Dataverse for Teams only)", "No"], ["Per-App Plan", "Yes", "Yes", "Yes", "Yes (250 MB DB per app pass)", "No"], ["Per-User Plan", "Yes", "Yes", "Yes", "Yes (250 MB DB per user)", "No (add-on available)"], ["Per-User Plan with RPA", "Yes", "Yes", "Yes", "Yes", "Yes (attended)"], ["Per-Flow Plan", "Yes", "Yes", "Yes", "Yes (50 MB DB per flow)", "No"], ["Dynamics 365 seeded", "Yes", "Yes (within D365 context)", "Yes (within D365 context)", "Yes", "No"]]} />
+
+<ExamTip>Licensing questions on the PL-900 exam typically test two key concepts: (1) Using premium connectors (including Dataverse, SQL Server, HTTP with Azure AD) requires a premium license — Office 365 seeded licenses are NOT sufficient. (2) Seeded licenses from Office 365 only cover standard connectors and do not include Dataverse access (except Dataverse for Teams, which has limited capacity).</ExamTip>
+
+### Monitoring and Analytics
+
+The Power Platform Admin Center provides several monitoring tools to help administrators understand platform health and adoption.
+
+**Tenant-level analytics:**
+
+- **Power Apps analytics** — Unique users, app launches, active apps, service performance, and connector usage across the tenant.
+- **Power Automate analytics** — Flow runs, success/failure rates, connector usage, and flow creator activity.
+- **Dataverse analytics** — API call statistics, plug-in execution metrics, and storage consumption breakdown (database, file, log).
+
+**Capacity management:**
+
+- **Database capacity** — Consumed by Dataverse table data, metadata, and system tables. Measured in GB.
+- **File capacity** — Consumed by file and image columns, attachments, and notes. Measured in GB.
+- **Log capacity** — Consumed by audit logs and activity logs. Measured in GB.
+- Administrators can drill into capacity by environment to identify which environments consume the most storage.
+
+<Callout type="warning" title="Capacity Overage">If your tenant exceeds its Dataverse storage capacity, administrators receive warnings and may eventually be blocked from creating new environments or resources. Monitor capacity proactively and either purchase additional capacity or clean up unused environments and data.</Callout>
+
+**Additional monitoring tools:**
+
+- **Power Platform Activity Logging** — Integrates with Microsoft Purview (formerly Office 365 Compliance Center) to provide a unified audit trail of administrative and maker activities.
+- **Power Automate Analytics for Desktop Flows** — Tracks RPA execution, machine availability, and queue performance.
+- **Environment health dashboards** — Available through the CoE Starter Kit for customized monitoring.
+
+<DidYouKnow>Power Platform Admin Center analytics have a data retention period of 28 days by default. For long-term analytics, organizations can export data to Azure Data Lake or Power BI datasets using the CoE Starter Kit or custom solutions built with the admin connectors.</DidYouKnow>
+
+### Putting It All Together: Governance Framework
+
+A mature Power Platform governance framework combines all the concepts covered in this module:
+
+1. **Environment strategy** — Use separate Development, Test, and Production environments. Restrict creation of Production environments to IT administrators. Let citizen developers use the Default environment or Developer environments for experimentation.
+
+2. **DLP policies** — Create a tenant-level baseline DLP policy that protects all environments. Layer environment-specific policies for environments with unique requirements.
+
+3. **Solution-based ALM** — Require that all production-bound customizations travel through managed solutions. Use version control (Azure DevOps or GitHub) to store solution files.
+
+4. **Licensing governance** — Track license consumption and ensure users have appropriate licenses for the connectors they use. Use the CoE Starter Kit inventory to identify apps that require premium licensing.
+
+5. **Monitoring** — Review Admin Center analytics regularly. Set up alerts for capacity thresholds. Use activity logging for compliance auditing.
+
+6. **Community and enablement** — Establish a Center of Excellence team to support citizen developers, provide training, review apps before production deployment, and maintain governance policies.
+
+<ExamTip>The PL-900 exam may present scenario questions where you need to recommend an environment strategy or DLP configuration. Always align your answer with the principle of least privilege: use Production environments only for production apps, restrict the Default environment through DLP policies, and deploy managed (not unmanaged) solutions to production.</ExamTip>
+
+### Summary of Key Concepts for the Exam
+
+- The **Power Platform Admin Center** is the central management portal for environments, DLP, analytics, and capacity.
+- **Environment types** serve different purposes: Default (personal productivity), Production (business apps), Sandbox (testing), Developer (free individual development), Trial (evaluation).
+- **DLP policies** classify connectors as Business, Non-Business, or Blocked. Connectors cannot cross groups in a single app or flow.
+- When **multiple DLP policies** apply, the most restrictive combination wins.
+- **Managed solutions** are for deployment to test and production; **unmanaged solutions** are for development only.
+- **Office 365 seeded licenses** include only standard connectors — premium connectors and Dataverse require premium licensing.
+- The **CoE Starter Kit** provides inventory, governance automation, and adoption nurturing — but it is not an official Microsoft product.
+- Monitor **capacity** (database, file, log) to avoid overage issues.

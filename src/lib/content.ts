@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import type { Vendor, Certification, Module } from "./types";
+import type { Vendor, Certification, Module, QuizQuestion } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -60,4 +60,37 @@ export async function getAllCertifications(
     if (cert) certs.push(cert);
   }
   return certs;
+}
+
+export async function getModuleMdxSource(
+  vendorSlug: string,
+  certSlug: string,
+  moduleSlug: string
+): Promise<string | null> {
+  const filePath = path.join(
+    CONTENT_DIR,
+    "certifications",
+    vendorSlug,
+    certSlug,
+    `${moduleSlug}.mdx`
+  );
+  try {
+    return await fs.readFile(filePath, "utf-8");
+  } catch {
+    return null;
+  }
+}
+
+export async function getAllQuizQuestions(
+  vendorSlug: string,
+  certSlug: string
+): Promise<QuizQuestion[]> {
+  const cert = await getCertification(vendorSlug, certSlug);
+  if (!cert) return [];
+  const moduleQuestions = cert.modules.flatMap((m) => m.quizQuestions ?? []);
+  const allMap = new Map<string, QuizQuestion>();
+  for (const q of [...cert.quizQuestions, ...moduleQuestions]) {
+    allMap.set(q.id, q);
+  }
+  return Array.from(allMap.values());
 }

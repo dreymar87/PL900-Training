@@ -1,0 +1,162 @@
+## Microsoft Power Platform Overview
+
+The Microsoft Power Platform is a suite of low-code/no-code tools that empowers business users and professional developers alike to build custom applications, automate workflows, analyze data, and create websites -- all without writing traditional code. Understanding the Power Platform at a high level is fundamental to the PL-900 exam, as roughly 20-25% of the questions focus on describing the business value of the platform.
+
+<KeyTerm term="Low-Code/No-Code">A development approach that allows users to create applications and workflows using visual designers and drag-and-drop interfaces rather than writing code manually. Low-code platforms still allow custom code when needed, while no-code platforms are designed for users with zero programming experience.</KeyTerm>
+
+<ExamTip>The PL-900 exam frequently tests whether you understand the difference between low-code and no-code. Power Apps and Power Automate are considered low-code because they allow formulas and expressions, while many features can be used with no code at all.</ExamTip>
+
+---
+
+## The Four Pillars of Power Platform
+
+### Power Apps
+
+Power Apps is the application development pillar of the Power Platform. It enables users to build custom business applications that run on web browsers, tablets, and mobile phones. Power Apps provides two primary app types -- canvas apps and model-driven apps -- each suited to different scenarios. Canvas apps give designers pixel-level control over layout and user experience, while model-driven apps generate responsive interfaces automatically from a data model defined in Microsoft Dataverse. A third option, Power Pages, was historically grouped under Power Apps but is now its own standalone product. Power Apps connects to over 1,000 data sources through built-in connectors, including SharePoint, SQL Server, Dynamics 365, and third-party services like Salesforce and Google Sheets.
+
+<DidYouKnow>Power Apps was originally launched in 2016 under the name "Project Siena" as a canvas-only app builder. Model-driven apps came later when Microsoft unified Dynamics 365 customization into the Power Platform.</DidYouKnow>
+
+### Power Automate
+
+Power Automate is the workflow automation pillar. It allows users to create automated workflows (called "flows") that connect different services and perform actions based on triggers and conditions. There are three main types of cloud flows: automated flows that respond to events, instant flows triggered manually, and scheduled flows that run on a timer. Beyond cloud flows, Power Automate also supports desktop flows for robotic process automation (RPA), enabling users to automate repetitive tasks in legacy desktop applications that lack modern APIs. Business process flows provide a guided experience that walks users through multi-stage business procedures.
+
+<KeyTerm term="Robotic Process Automation (RPA)">A technology that uses software robots to mimic human interactions with desktop applications, websites, and legacy systems. In Power Automate, RPA is delivered through desktop flows that can record and replay mouse clicks, keystrokes, and data entry steps.</KeyTerm>
+
+### Power BI
+
+Power BI is the data analytics and visualization pillar. It transforms raw data from multiple sources into interactive dashboards and reports that help organizations make data-driven decisions. Power BI consists of three main components: Power BI Desktop (a Windows application for authoring reports), the Power BI service (a cloud-based portal for sharing and collaboration), and Power BI Mobile (apps for iOS and Android). Reports are built using a drag-and-drop interface with a rich library of visualizations including bar charts, maps, KPI indicators, and custom visuals from the marketplace. Power BI uses a data modeling language called DAX (Data Analysis Expressions) for creating calculated columns and measures.
+
+<ExamTip>Know the three components of Power BI for the exam: Power BI Desktop for authoring, the Power BI service (app.powerbi.com) for publishing and sharing, and Power BI Mobile for consumption on the go. Questions often ask which component is used for which purpose.</ExamTip>
+
+### Power Pages
+
+Power Pages is the external-facing website pillar. It allows organizations to build secure, data-driven websites that external users (customers, partners, vendors) can access. Unlike Power Apps which targets internal business users, Power Pages is designed for anonymous or authenticated external audiences. It provides professional website templates, a visual design studio, and integration with Dataverse for data storage. Power Pages supports features like user authentication, role-based access control, web forms, lists, and multistep processes. It is commonly used for self-service portals, community forums, application submission sites, and partner management portals.
+
+<DidYouKnow>Power Pages was previously known as "Power Apps Portals" and before that "Dynamics 365 Portals." Microsoft rebranded it as a standalone product in 2022 to emphasize its importance as a distinct pillar of the platform.</DidYouKnow>
+
+---
+
+## AI Builder
+
+AI Builder is an add-on capability within the Power Platform that brings artificial intelligence to Power Apps and Power Automate without requiring data science expertise. It provides both prebuilt AI models (ready to use immediately) and custom AI models (trained on your own data).
+
+Prebuilt models include:
+- **Text recognition (OCR)** -- extracts text from images and documents
+- **Sentiment analysis** -- detects positive, negative, or neutral sentiment in text
+- **Business card reader** -- extracts contact information from business card images
+- **Receipt processing** -- extracts key fields from receipts
+- **Language detection** -- identifies the language of a given text
+
+Custom models include:
+- **Prediction** -- predicts yes/no outcomes based on historical data
+- **Object detection** -- identifies and counts objects in images
+- **Document processing** -- extracts fields from structured and semi-structured documents
+- **Category classification** -- tags text into custom categories
+
+<KeyTerm term="AI Builder">A Power Platform capability that lets users add AI to apps and flows using prebuilt or custom machine learning models, without writing code or needing data science skills. It is licensed as an add-on with AI Builder credits.</KeyTerm>
+
+<ExamTip>The exam may ask you to identify which AI Builder model to use for a given scenario. Remember: document processing for invoices and forms, sentiment analysis for customer feedback, and prediction models for forecasting outcomes like customer churn.</ExamTip>
+
+---
+
+## How Power Platform Components Integrate
+
+One of the greatest strengths of the Power Platform is how its components work together seamlessly. This integration is a key exam topic.
+
+**Microsoft Dataverse** serves as the common data backbone. When Power Apps stores data in Dataverse, that same data is immediately available to Power Automate flows, Power BI reports, and Power Pages websites. This eliminates data silos and ensures consistency.
+
+<KeyTerm term="Microsoft Dataverse">A cloud-based, enterprise-grade data platform that provides standardized tables, columns, relationships, and security. It is the recommended data source for Power Platform solutions and includes built-in business logic, validation rules, and role-based security.</KeyTerm>
+
+Common integration patterns include:
+- A **Power App** collects data from users and stores it in Dataverse. A **Power Automate** flow triggers when a new record is created, sending an approval email. Once approved, the flow updates the record status. A **Power BI** dashboard visualizes approval metrics in real time.
+- A **Power Pages** website allows external customers to submit service requests. A **Power Automate** flow routes the request to the right team. A **Power App** lets internal staff manage and resolve requests. **Power BI** tracks resolution times and SLA compliance.
+- **AI Builder** processes incoming invoices in a Power Automate flow, extracting key fields and creating Dataverse records that Power Apps users review and Power BI reports summarize.
+
+<Callout type="info" title="Connectors Are the Glue">Connectors enable Power Platform components to communicate with external services. There are over 1,000 connectors including standard connectors (SharePoint, Outlook, Teams), premium connectors (SQL Server, HTTP, Dataverse), and custom connectors you build yourself for proprietary APIs.</Callout>
+
+---
+
+## Licensing Overview
+
+Power Platform licensing is a common source of confusion and a topic the PL-900 exam touches on at a high level. There are several licensing models depending on the product.
+
+### Power Apps Licensing
+
+- **Per-app plan** -- Grants a single user access to one specific app (canvas or model-driven) plus one Power Pages website. Best for organizations where only a few apps are needed.
+- **Per-user plan** -- Grants a single user access to unlimited apps. Best for power users who need access to many apps.
+- **Pay-as-you-go** -- Charges per active user per app per month, billed through an Azure subscription. Ideal for apps with unpredictable or seasonal usage.
+
+### Power Automate Licensing
+
+- **Per-user plan** -- A single user can create and run unlimited cloud flows.
+- **Per-user plan with attended RPA** -- Adds the ability to run desktop flows with user interaction.
+- **Per-flow plan** -- Licenses a specific flow for unlimited users (minimum 5 flow runs). Best for organization-wide automations.
+- **Unattended RPA add-on** -- Allows desktop flows to run without a signed-in user.
+
+### Power BI Licensing
+
+- **Power BI Pro** -- Per-user license for sharing and collaborating on reports.
+- **Power BI Premium Per User (PPU)** -- Enhanced Pro with premium features like larger datasets and paginated reports.
+- **Power BI Premium Per Capacity** -- Organization-wide capacity that allows free users to consume shared reports.
+
+<ExamTip>You do not need to memorize exact pricing for the PL-900 exam, but you should understand the difference between per-user, per-app, and per-flow licensing models and when each is appropriate.</ExamTip>
+
+<Callout type="warning" title="Premium Connectors Require Premium Licenses">Using any premium connector (such as SQL Server, HTTP, or Dataverse) in a Power App or Power Automate flow requires the user to have a premium (paid) license. Standard connectors like SharePoint and Outlook are included with Microsoft 365 licenses.</Callout>
+
+---
+
+## Power Platform vs Traditional Development
+
+| Aspect | Power Platform (Low-Code) | Traditional Development |
+|---|---|---|
+| Development speed | Days to weeks for most apps | Weeks to months for equivalent apps |
+| Developer skill required | Business users with training can build solutions | Professional developers with coding expertise |
+| Customization depth | High for standard scenarios; some limitations for edge cases | Unlimited customization with full code control |
+| Maintenance | Managed platform; Microsoft handles infrastructure | Team must manage servers, deployments, and updates |
+| Cost model | Subscription-based licensing per user/app/flow | Developer salaries, hosting, and infrastructure costs |
+| Integration | 1,000+ prebuilt connectors; custom connectors for REST APIs | Must build every integration from scratch or use SDKs |
+| Governance | Built-in environments, DLP policies, and admin center | Custom governance frameworks and DevOps pipelines required |
+| Scalability | Scales automatically within platform limits | Scales based on architecture decisions and infrastructure |
+| Best suited for | Business process apps, departmental solutions, prototypes | Complex enterprise systems, real-time applications, custom UIs |
+
+<Callout type="success" title="Fusion Development">Microsoft promotes a concept called Fusion Development where professional developers and citizen developers (business users) collaborate. Pro developers extend Power Platform with custom connectors, PCF controls, and Azure Functions, while citizen developers build the front-end apps and flows.</Callout>
+
+<KeyTerm term="Citizen Developer">A business user who creates applications and automations using low-code/no-code tools without formal software development training. The Power Platform is specifically designed to empower citizen developers while providing IT governance controls.</KeyTerm>
+
+<KeyTerm term="Fusion Development">A collaborative approach where professional developers and citizen developers work together. Professional developers build reusable components, APIs, and custom connectors, while citizen developers assemble these into business solutions using low-code tools.</KeyTerm>
+
+---
+
+## Environments and Data Loss Prevention
+
+Every Power Platform deployment operates within environments. An environment is a container that stores apps, flows, data, and connections. Organizations typically maintain multiple environments for development, testing, and production.
+
+**Data Loss Prevention (DLP) policies** allow administrators to classify connectors into Business, Non-Business, or Blocked groups. Connectors in different groups cannot be used together in the same app or flow, preventing accidental data leakage.
+
+<ExamTip>Understand that DLP policies operate at the environment level and that an administrator can create multiple policies. If a connector is blocked by any applicable policy, it cannot be used in that environment regardless of other policies.</ExamTip>
+
+---
+
+## Microsoft 365 Integration
+
+The Power Platform is deeply integrated with Microsoft 365 services, which amplifies its value for organizations already using the Microsoft ecosystem.
+
+- **Microsoft Teams** -- Power Apps can be embedded as tabs in Teams channels. Power Automate flows can be triggered from Teams messages. Power BI reports can be pinned to Teams tabs for easy access.
+- **SharePoint** -- Power Apps can replace default SharePoint list forms with custom canvas apps. Power Automate flows commonly trigger from SharePoint list and library events.
+- **Outlook** -- Power Automate approvals appear directly in Outlook. Flows can be triggered by email events and can send formatted email notifications.
+- **Excel** -- Power Apps can use Excel files stored in OneDrive or SharePoint as data sources. Power BI can import and transform Excel data.
+
+<DidYouKnow>Every Microsoft 365 business and enterprise license includes limited Power Apps and Power Automate capabilities with standard connectors. This means most organizations already have access to basic Power Platform features without purchasing additional licenses.</DidYouKnow>
+
+---
+
+## Key Takeaways for the PL-900 Exam
+
+- The Power Platform consists of four pillars: Power Apps, Power Automate, Power BI, and Power Pages.
+- Microsoft Dataverse is the recommended shared data layer that ties all components together.
+- AI Builder adds prebuilt and custom AI models to apps and flows.
+- Connectors bridge Power Platform to external data sources and services.
+- Licensing varies by product and model: per-user, per-app, per-flow, and pay-as-you-go.
+- Environments and DLP policies provide governance and security controls.
+- Power Platform complements traditional development through fusion development practices.
+- Deep integration with Microsoft 365 makes Power Platform especially powerful for organizations in the Microsoft ecosystem.
