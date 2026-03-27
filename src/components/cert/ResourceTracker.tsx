@@ -9,10 +9,10 @@ interface ResourceTrackerProps {
 }
 
 const typeIcons: Record<Resource["type"], string> = {
-  video: "&#9654;",     // play
-  article: "&#9998;",   // pencil
-  documentation: "&#128214;", // book
-  course: "&#127891;",  // graduation cap
+  video: "\u25B6",
+  article: "\u270E",
+  documentation: "\uD83D\uDCD6",
+  course: "\uD83C\uDF93",
 };
 
 const typeColors: Record<Resource["type"], string> = {
@@ -129,6 +129,9 @@ export default function ResourceTracker({ resources, certSlug }: ResourceTracker
             >
               <button
                 onClick={() => toggle(resource.id)}
+                role="checkbox"
+                aria-checked={isCompleted}
+                aria-label={`Mark ${resource.title} as ${isCompleted ? "incomplete" : "complete"}`}
                 className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
                   isCompleted
                     ? "bg-success border-success"
@@ -144,8 +147,10 @@ export default function ResourceTracker({ resources, certSlug }: ResourceTracker
 
               <span
                 className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm ${typeColors[resource.type]}`}
-                dangerouslySetInnerHTML={{ __html: typeIcons[resource.type] }}
-              />
+                aria-hidden="true"
+              >
+                {typeIcons[resource.type]}
+              </span>
 
               <div className="flex-1 min-w-0">
                 <a
